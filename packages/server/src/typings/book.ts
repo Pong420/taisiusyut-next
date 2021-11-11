@@ -7,3 +7,12 @@ export interface IBook {
   intro: string;
   latestChapter: string;
 }
+
+export interface ISearchResult {
+  bookID: string;
+  name: string;
+  author: string;
+  status: string;
+  latestChapter: string;
+  updatedAt: number;
+}
