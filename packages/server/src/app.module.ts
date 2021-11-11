@@ -5,9 +5,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from './config';
 import { MongooseSerializerInterceptor } from '@/utils/mongoose-serializer.interceptor';
 import { MongooseModule } from './modules/database';
+import { BookModule } from './modules/book/book.module';
 
 @Module({
-  imports: [ConfigModule, UsersModule, AuthModule, MongooseModule],
+  imports: [ConfigModule, UsersModule, AuthModule, MongooseModule, BookModule],
   controllers: [],
   providers: [
     {
