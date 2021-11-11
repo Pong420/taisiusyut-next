@@ -1,7 +1,8 @@
 import { IUser } from '@/typings';
 import { Exclude, Transform } from 'class-transformer';
 import { Prop, PropOptions, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Timestamp } from '@/typings';
 import bcrypt from 'bcrypt';
 
 export type UserDocument = User & Document;
@@ -16,7 +17,7 @@ function hashPassword(password: string) {
     transform: (_model, raw) => new User(raw)
   }
 })
-export class User implements IUser {
+export class User implements IUser, Timestamp {
   id: string;
 
   @Prop({ type: String, required: true, unique: true, trim: true })
@@ -40,8 +41,11 @@ export class User implements IUser {
   @Transform(({ value }) => value && Number(value))
   createdAt: number;
 
-  @Transform(({ value }) => value && Number(value))
+  @Exclude()
   updatedAt: number;
+
+  @Prop({ type: [Types.ObjectId] })
+  books: string[];
 
   constructor(payload: Partial<User>) {
     Object.assign(this, payload);

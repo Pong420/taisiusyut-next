@@ -1,7 +1,11 @@
-export interface Timestamp {
+export interface CreatedAt {
   createdAt: number;
+}
+export interface UpdatedAt {
   updatedAt: number;
 }
+
+export interface Timestamp extends CreatedAt, UpdatedAt {}
 
 export interface IPaginateResult<T> {
   data: T[];
