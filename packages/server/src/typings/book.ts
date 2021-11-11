@@ -6,6 +6,7 @@ export interface IBook {
   cover?: string;
   intro: string;
   latestChapter: string;
+  provider: string;
 }
 
 export interface ISearchResult {
@@ -15,4 +16,9 @@ export interface ISearchResult {
   status: string;
   latestChapter: string;
   updatedAt: number;
+}
+
+export interface IBookPayload {
+  bookID: string;
+  provider: string;
 }

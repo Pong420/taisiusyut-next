@@ -45,7 +45,7 @@ export abstract class MongooseCRUDService<T, D extends T & Document = T & Docume
     return this.model.findOne(filter, projection, options);
   }
 
-  async findAll(filter: FilterQuery<D> = {}, projection: any | null = null, options: QueryOptions = {}): Promise<D[]> {
+  async find(filter: FilterQuery<D> = {}, projection: any | null = null, options: QueryOptions = {}): Promise<D[]> {
     return this.model.find(filter, projection, options);
   }
 

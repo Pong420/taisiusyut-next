@@ -1,9 +1,9 @@
 import chineseConv from 'chinese-conv';
 import { Injectable } from '@nestjs/common';
-import { ISearchResult } from '@/typings';
+import { IBook, ISearchResult } from '@/typings';
 import { Scraper, trimChapterName } from '..';
 
-export const name = 'bigquge';
+export const name = '筆趣閣';
 
 @Injectable()
 export class BiqugeScraper extends Scraper {
@@ -22,7 +22,8 @@ export class BiqugeScraper extends Scraper {
     const chapterName = $aTag.text()?.trim();
     const latestChapter = trimChapterName(chapterName);
 
-    return {
+    const book: Omit<IBook, 'id'> = {
+      provider: this.name,
       bookID,
       name,
       author,
@@ -30,6 +31,8 @@ export class BiqugeScraper extends Scraper {
       intro,
       latestChapter
     };
+
+    return book;
   }
 
   async searchBooks(name: string) {

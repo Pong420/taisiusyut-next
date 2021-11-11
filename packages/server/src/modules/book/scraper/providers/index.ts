@@ -1,13 +1,14 @@
 import { Scraper } from '..';
 import { name as bigquge, BiqugeScraper } from './bigquge';
 
+export type ScraperName = keyof typeof scrapers;
+
 export const scrapers: Record<string, Scraper> = {
   [bigquge]: new BiqugeScraper()
 };
-export type ScraperName = keyof typeof scrapers;
 
-const defaultScraper = bigquge;
+const DEFAULT_SCRAPER = bigquge;
 
-export function getScraper(name: ScraperName = defaultScraper) {
-  return scrapers[name] || scrapers[defaultScraper];
+export function getScraper(name: ScraperName = DEFAULT_SCRAPER) {
+  return scrapers[name] || scrapers[DEFAULT_SCRAPER];
 }
