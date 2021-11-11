@@ -1,0 +1,22 @@
+@mixin fake-border($position: bottom, $dividerWidth: 1px, $color: var(--divider-color), $length: 100%) {
+  @if $position == left or $position == right {
+    background: linear-gradient(to top, $color 0, $color 100%);
+    background-size: $dividerWidth, $length;
+    background-position: $position center;
+  } @else {
+    @debug $position;
+    background: linear-gradient(to left, $color 0, $color 100%);
+    background-size: $length $dividerWidth;
+    background-position: center $position;
+  }
+
+  background-repeat: no-repeat;
+}
+
+@mixin shadow-border($x: 0, $y: 0, $b: 0, $s: 1px) {
+  // prettier-ignore
+  box-shadow: 
+    $x $y $b $s var(--divider-color), 
+    0 0 0 rgba(#000, 0),
+    0 0 0 rgba(#000, 0);
+}

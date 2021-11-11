@@ -1,0 +1,17 @@
+@import './functions';
+@import './mixins';
+@import './colors';
+@import '~@blueprintjs/core/src/common/colors';
+@import '~@blueprintjs/core/lib/scss/variables';
+
+$sidebar-width: 250px;
+
+$fix-width: 1280px;
+$max-width: 1440px;
+
+$header-height: 55px !default;
+
+$break-point: 768px !default;
+
+$base-font-family: -apple-system, Microsoft JhengHei, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+  Open Sans, Helvetica Neue, sans-serif;

@@ -1,0 +1,53 @@
+@import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import './helpers';
+@import './blueprint';
+@import './css-variables';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+#__next {
+  @include sq-dimen(100%);
+}
+
+body {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+
+  // this disable scroll bouncing on some brwoser
+  overscroll-behavior: none;
+}
+
+img {
+  vertical-align: middle;
+}
+
+a:not(.link),
+a:not(.link):hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+html[custom-scrollbar] {
+  ::-webkit-scrollbar {
+    width: 0.8rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: rgba(128, 128, 128, 0.4);
+    border: 2px solid transparent;
+    border-radius: 0.8rem;
+    // prettier-ignore
+    box-shadow: 
+      inset -1px -1px 0 rgba(0, 0, 0, 0.05),
+      inset 1px 1px 0 rgba(0, 0, 0, 0.05);
+  }
+}

@@ -1,0 +1,88 @@
+@import '~styles/helpers';
+
+.header {
+  @include dimen(100%, $header-height);
+  @include flex(center, center);
+  @include padding-x(15px);
+  @include relative(); // prevent shadow-border blocked by others
+  @include shadow-border(0, 2px, 0, -1px);
+  background-color: var(--primary-color);
+  flex: 0 0 auto;
+
+  .left,
+  .right {
+    flex: 0 0 auto;
+  }
+}
+
+.header-title {
+  @include text-overflow-ellipsis();
+  @include padding-x(10px);
+  flex: 1 1 auto;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.layout {
+  @include sq-dimen(100%);
+  @include flex($flex-direction: column);
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  font-family: #{$base-font-family};
+  overflow: hidden;
+
+  @media (min-width: $break-point+1) {
+    font-size: $pt-font-size;
+
+    html:not([data-display='single']) & {
+      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
+    }
+  }
+
+  @media (max-width: $break-point) {
+    // https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
+    // Disable Auto Zoom in Input “Text” tag - Safari on iPhone
+    font-size: 16px;
+  }
+
+  :global([data-width='fixed']) & {
+    @media (min-width: $fix-width) {
+      @include shadow-border();
+      max-width: $fix-width;
+      margin: auto;
+
+      .header {
+        @include margin-x(auto);
+        max-width: $fix-width;
+        right: 0;
+      }
+    }
+  }
+}
+
+.layout-content {
+  @include flex();
+  @include sq-dimen(100%);
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.left-panel {
+  @include relative(); // for shadow-border
+  @include shadow-border();
+  flex: 1 0 300px;
+  overflow: auto;
+}
+
+.right-panel:not([hidden]) {
+  @include dimen(100%);
+  @include flex($flex-direction: column);
+  @include relative();
+  @include shadow-border();
+  background-color: var(--secondary-color);
+  flex: 1 1 auto;
+  overflow: hidden;
+}

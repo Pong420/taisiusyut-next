@@ -1,0 +1,14 @@
+@import '~styles/helpers';
+@import '~styles/font/ink-painting';
+
+.home {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+.content {
+  @include sq-dimen(100%);
+  @include flex(center, center);
+  font-family: 'ink-painting';
+  font-size: 60px;
+}

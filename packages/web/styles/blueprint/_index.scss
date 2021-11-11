@@ -1,0 +1,82 @@
+@import './form';
+@import './toast';
+@import './button';
+
+$pt-dark-divider-black: rgba(255, 255, 255, 0.15);
+
+.#{$ns}-menu-item > .#{$ns}-icon:not([class*='intent']),
+.#{$ns}-button:not([class*='intent']) .#{$ns}-icon {
+  // color: inherit !important;
+  color: var(--text-color) !important;
+}
+
+.#{$ns}-dialog.#{$ns}-dialog {
+  width: auto;
+  background-color: var(--secondary-color);
+  min-width: 300px;
+  overflow: hidden;
+
+  .#{$ns}-dialog-header {
+    background-color: var(--primary-color);
+    height: 50px;
+    padding-right: 10px;
+    .#{$ns}-heading {
+      font-size: 16px;
+    }
+
+    .#{$ns}-icon {
+      color: inherit;
+    }
+  }
+}
+
+a,
+a:hover,
+.#{$ns}-dark a,
+.#{$ns}-dark a:hover {
+  color: inherit;
+}
+
+// for checkbox / swtich
+.#{$ns}-control {
+  margin-bottom: 0;
+}
+
+[data-theme^='dark'] {
+  .#{$ns}-popover.#{$ns}-popover {
+    .#{$ns}-popover-arrow {
+      &:before {
+        box-shadow: $pt-dark-elevation-shadow-0;
+      }
+    }
+    svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .#{$ns}-popover-arrow-fill {
+      fill: var(--primary-color);
+    }
+
+    .#{$ns}-popover-content {
+      background-color: var(--primary-color);
+      box-shadow: $pt-dark-elevation-shadow-0;
+    }
+  }
+}
+
+// https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
+// Disable Auto Zoom in Input “Text” tag - Safari on iPhone
+.#{$ns}-input,
+.#{$ns}-html-select {
+  font-size: inherit;
+}
+
+// for drawer trigger by long press in iPhone safari
+.#{$ns}-overlay-open {
+  user-select: none;
+}
+
+.#{$ns}-heading {
+  color: var(--text-color);
+}

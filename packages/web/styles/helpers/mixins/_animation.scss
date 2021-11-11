@@ -1,0 +1,6 @@
+@mixin animate($property, $duration: 0.3s, $easing: ease) {
+  transition-duration: $duration;
+  transition-property: $property;
+  transition-timing-function: $easing;
+  will-change: $property;
+}

@@ -5,6 +5,9 @@ import { INestApplication } from '@nestjs/common';
 import { NextApiHandler } from 'next';
 import { AppModule } from './app.module';
 import { setup } from './setup';
+import { BookService } from './modules/book/book.service';
+
+export { getScraper } from './modules/book/scraper/providers';
 
 let app: INestApplication;
 let appPromise: Promise<INestApplication>;
@@ -32,4 +35,8 @@ export async function getListener() {
   const server: http.Server = app.getHttpServer();
   const [listener] = server.listeners('request') as NextApiHandler[];
   return listener;
+}
+
+export function getBookService() {
+  return app.get(BookService);
 }
