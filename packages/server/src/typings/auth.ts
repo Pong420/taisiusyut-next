@@ -2,7 +2,7 @@ import { Timestamp } from './common';
 import { ICreateUser } from './user';
 
 export interface IJWTSignPayload {
-  userId: string;
+  id: string;
   username: string;
   nickname: string;
 }
@@ -18,7 +18,7 @@ export interface IValidatePayload extends IJWTSignPayload {
 }
 
 export interface ICreateRefreshToken {
-  userId: string;
+  user: string;
   refreshToken: string;
 }
 

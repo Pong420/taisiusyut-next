@@ -15,7 +15,7 @@ export class RefreshToken implements IRefreshToken {
   id: string;
 
   @Prop({ type: String, required: true, trim: true })
-  userId: string;
+  user: string;
 
   @Prop({ type: String, required: true, unique: true })
   refreshToken: string;

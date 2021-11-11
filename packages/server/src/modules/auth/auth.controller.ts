@@ -29,7 +29,7 @@ export class AuthController {
       { refreshToken },
       {
         refreshToken,
-        userId: user.userId
+        id: user.id
       },
       { upsert: true }
     );
