@@ -4,7 +4,7 @@ import { Layout, LayoutProps } from '@/components/Layout';
 import { BookShelf } from '@/components/BookShelf';
 import { AuthProvider } from '@/hooks/useAuth';
 import { PreferencesProvider } from '@/hooks/usePreferences';
-// import '@/styles/globals.scss';
+import '@/styles/globals.scss';
 
 interface ExtendAppProps extends AppProps {
   Component: AppProps['Component'] & {

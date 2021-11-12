@@ -1,13 +1,15 @@
 // @ts-check
 
 const withTM = require('next-transpile-modules')(['@taisiusyut-next/server']);
-const { getDependencies } = require('./getDependencies');
+const { getDependencies } = require('./scripts/getDependencies');
+const { ignoreCssUrlInlineSvg } = require('./scripts/ignoreCssUrlInlineSvg');
 
 const { serverDeps } = getDependencies();
 
 /** @type {import('next').NextConfig} */
 const config = {
-  reactStrictMode: true,
+  // for @blueprintjs
+  reactStrictMode: false,
 
   /**
    * @param {import('webpack').Configuration} config
@@ -19,6 +21,8 @@ const config = {
     } else {
       throw `webpack config externals is ${config.externals}`;
     }
+
+    ignoreCssUrlInlineSvg(config);
 
     // Important: return the modified config
     return config;

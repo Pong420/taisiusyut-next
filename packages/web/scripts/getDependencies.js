@@ -1,6 +1,6 @@
 function getDependencies() {
   const server = require('@taisiusyut-next/server/package.json');
-  const web = require('./package.json');
+  const web = require('../package.json');
 
   /**
    * @type {Record<string, boolean>}
