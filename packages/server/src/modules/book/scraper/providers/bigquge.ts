@@ -69,7 +69,8 @@ export class BiqugeScraper extends Scraper {
             status,
             author,
             latestChapter: trimChapterName(latestChapter),
-            updatedAt: new Date(updateTime).getTime()
+            updatedAt: new Date(updateTime).getTime(),
+            provider: this.name
           });
         }
         return result;

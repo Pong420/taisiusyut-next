@@ -16,6 +16,7 @@ export interface ISearchResult {
   status: string;
   latestChapter: string;
   updatedAt: number;
+  provider: string;
 }
 
 export interface IBookPayload {
