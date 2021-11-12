@@ -6,8 +6,7 @@ import { NextApiHandler } from 'next';
 import { AppModule } from './app.module';
 import { setup } from './setup';
 import { BookService } from './modules/book/book.service';
-
-export { getScraper } from './modules/book/scraper/providers';
+import { MongooseSerializerInterceptor } from './utils/mongoose-serializer.interceptor';
 
 let app: INestApplication;
 let appPromise: Promise<INestApplication>;
@@ -37,6 +36,12 @@ export async function getListener() {
   return listener;
 }
 
-export function getBookService() {
+export async function getBookService() {
+  const app = await getApp();
   return app.get(BookService);
+}
+
+export async function getSerializer() {
+  const app = await getApp();
+  return app.get(MongooseSerializerInterceptor);
 }

@@ -8,7 +8,7 @@ import { MongooseModule } from './modules/database';
 import { BookModule } from './modules/book/book.module';
 
 @Module({
-  imports: [ConfigModule, UsersModule, AuthModule, MongooseModule, BookModule],
+  imports: [ConfigModule, UsersModule, AuthModule, MongooseModule, BookModule, MongooseSerializerInterceptor],
   controllers: [],
   providers: [
     {
