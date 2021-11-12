@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from '@blueprintjs/core';
 import { Header } from '@/components/Layout/Header';
+import { ButtonPopover } from '@/components/ButtonPopover';
 import { ISearchResult } from '@/typings';
 import { Search, SearchForm, useForm, transoform } from './SearchForm';
 import { useSearchResult } from './useSearchResult';
 import { SearchItem } from './SearchItem';
 import classes from './SearchPanel.module.scss';
 
-export function SearchPanel() {
+export interface SearchPanelProps {
+  onLeave?: () => void;
+}
+
+export function SearchPanel({ onLeave }: SearchPanelProps) {
   const router = useRouter();
   const { asPath, query } = router;
   const [form] = useForm();
@@ -45,7 +50,7 @@ export function SearchPanel() {
 
   return (
     <div className={classes['panel']}>
-      <Header title="搜索書籍" left={<Button icon="arrow-left" minimal onClick={() => router.back()} />}></Header>
+      <Header title="搜索書籍" left={<ButtonPopover minimal icon="cross" content="取消搜索" onClick={onLeave} />} />
       <div className={classes['content']}>
         <SearchForm form={form} onFinish={handleSearch} />
         <div className={classes['items']} ref={scrollerRef}>

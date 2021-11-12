@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { BookShelf } from '@/components/BookShelf';
 import { SearchPanel } from '@/components/SearchPanel';
 import { NoSSR } from '@/components/NoSSR';
+import { useGoBack } from '@/hooks/useGoBack';
 import classes from './Layout.module.scss';
 
 export interface LayoutProps {
@@ -10,21 +11,29 @@ export interface LayoutProps {
   children?: React.ReactNode;
 }
 
-function getLeftPanel(leftPanel?: React.ReactElement) {
-  const isSearchPage = router.asPath.startsWith('/search');
-  if (isSearchPage || (leftPanel?.type === SearchPanel && router.asPath.startsWith('/book'))) {
-    return <SearchPanel />;
-  }
-  return <BookShelf />;
-}
-
 export function Layout({ children }: LayoutProps) {
   const { asPath } = useRouter();
+  const { goBack } = useGoBack();
   const [leftPanel, setLeftPanel] = useState<React.ReactElement | undefined>(undefined);
 
   useEffect(() => {
+    const onLeave = () => goBack({ targetPath: ['/'] });
+
+    function getLeftPanel(leftPanel?: React.ReactElement) {
+      let newLeftPanel: React.ReactElement = <BookShelf />;
+
+      const isSearchPage = asPath.startsWith('/search');
+      const isBookDetailPage = asPath.startsWith('/book');
+
+      if (isSearchPage || (leftPanel?.type === SearchPanel && isBookDetailPage)) {
+        newLeftPanel = <SearchPanel onLeave={onLeave} />;
+      }
+
+      return newLeftPanel;
+    }
+
     setLeftPanel(getLeftPanel);
-  }, [asPath]);
+  }, [asPath, goBack]);
 
   return (
     <div className={classes['layout']}>
