@@ -1,0 +1,77 @@
+@import '~styles/helpers';
+
+.book {
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.header {
+  margin-bottom: 5px;
+  z-index: 1;
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+
+  @media (min-width: 481px) {
+    font-size: 20px;
+  }
+}
+
+.name {
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.author {
+  color: var(--text-light-color);
+  font-size: 0.7em;
+  margin-top: 0.25em;
+}
+
+.tags {
+  &:not(:empty) {
+    margin-bottom: 10px;
+  }
+}
+
+.description {
+  line-height: 1.5em;
+  word-break: break-all;
+
+  @media (min-width: 481px) {
+    white-space: break-spaces;
+    overflow: hidden;
+  }
+}
+
+.book-model-container {
+  float: left;
+}
+
+.book-model {
+  left: 0;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+// .footer {
+//   @include flex(center, flex-end);
+//   margin-top: 20px;
+//   font-size: 14px;
+//   position: relative;
+//   bottom: -10px;
+//   right: -5px;
+//   color: var(--text-light-color);
+
+//   > div {
+//     line-height: 1em;
+
+//     & + div {
+//       border-left: 1px solid var(--text-light-color);
+//       margin-left: 10px;
+//       padding-left: 10px;
+//     }
+//   }
+// }

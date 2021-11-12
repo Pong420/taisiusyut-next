@@ -30,6 +30,12 @@ $pt-dark-divider-black: rgba(255, 255, 255, 0.15);
   }
 }
 
+.#{$ns}-dark {
+  .#{$ns}-card.#{$ns}-card {
+    background-color: var(--primary-color);
+  }
+}
+
 a,
 a:hover,
 .#{$ns}-dark a,

@@ -1,18 +1,20 @@
 import { GetServerSideProps } from 'next';
-import { Book, BookProps } from '@/components/Book';
-import { getScraper } from '@taisiusyut-next/server';
+import { BookDetails, BookDetailsProps } from '@/components/BookDetails';
+import { getBookService, getSerializer } from '@taisiusyut-next/server';
+import { IBook } from '@/typings';
 
-export const getServerSideProps: GetServerSideProps<BookProps> = async context => {
-  // const { bookName, provider } = context.query;
-  // if (typeof bookName === 'string' && typeof provider === 'string') {
-  //   const scraper = getScraper(provider);
-  //   if (scraper) {
-  //     const book = await scraper.getBook();
-  //   }
-  // }
+export const getServerSideProps: GetServerSideProps<BookDetailsProps> = async context => {
+  const { bookName, provider } = context.query;
+  const [service, serializer] = await Promise.all([getBookService(), getSerializer()]);
+  if (typeof bookName === 'string' && typeof provider === 'string') {
+    const doc = await service.findByName(bookName, provider);
+    if (doc) {
+      return { props: { book: serializer.transformToPlain(doc, {}) as IBook } };
+    }
+  }
   return { notFound: true };
 };
 
-export default function BookPage(props: BookProps) {
-  return <Book {...props} />;
+export default function BookPage(props: BookDetailsProps) {
+  return <BookDetails {...props} />;
 }

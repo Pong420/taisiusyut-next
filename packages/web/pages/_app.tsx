@@ -3,6 +3,7 @@ import type { AppProps /*, AppContext */ } from 'next/app';
 import { Layout, LayoutProps } from '@/components/Layout';
 import { BookShelf } from '@/components/BookShelf';
 import { AuthProvider } from '@/hooks/useAuth';
+import { GoBackProvider } from '@/hooks/useGoBack';
 import { PreferencesProvider } from '@/hooks/usePreferences';
 import '@/styles/globals.scss';
 
@@ -26,11 +27,13 @@ function AppContent(props: ExtendAppProps) {
 
 function App(props: ExtendAppProps) {
   return (
-    <AuthProvider>
-      <PreferencesProvider>
-        <AppContent {...props} />
-      </PreferencesProvider>
-    </AuthProvider>
+    <GoBackProvider>
+      <AuthProvider>
+        <PreferencesProvider>
+          <AppContent {...props} />
+        </PreferencesProvider>
+      </AuthProvider>
+    </GoBackProvider>
   );
 }
 
