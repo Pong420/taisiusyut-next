@@ -1,10 +1,10 @@
 import { createElement, Fragment, ReactNode } from 'react';
 import { Subject, timer } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { Position, Intent, ToastProps, ToastOptions, OverlayToaster } from '@blueprintjs/core';
+import { Position, Intent, ToastProps, IToastOptions, OverlayToaster } from '@blueprintjs/core';
 import { ApiError, getErrorMessage } from './getErrorMessage';
 
-const defaultOptions: Omit<ToastOptions, 'message'> = {
+const defaultOptions: Omit<IToastOptions, 'message'> = {
   key: 'toaster',
   timeout: 4000
 };
@@ -40,7 +40,7 @@ function renderMessage(titile = '', message: ReactNode = '') {
 }
 
 export const Toaster = {
-  success(options: Partial<ToastOptions>) {
+  success(options: Partial<IToastOptions>) {
     toasterSubject.next({
       ...defaultOptions,
       ...options,
@@ -49,7 +49,7 @@ export const Toaster = {
       message: renderMessage('Success', options.message)
     });
   },
-  failure(options: Partial<ToastOptions>) {
+  failure(options: Partial<IToastOptions>) {
     toasterSubject.next({
       ...defaultOptions,
       ...options,
@@ -67,7 +67,7 @@ export const Toaster = {
       message: renderMessage(prefix || 'Error', typeof error === 'string' ? error : getErrorMessage(error))
     });
   },
-  info(options: Partial<ToastOptions>) {
+  info(options: Partial<IToastOptions>) {
     toasterSubject.next({
       ...defaultOptions,
       ...options,

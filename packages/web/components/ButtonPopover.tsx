@@ -9,7 +9,7 @@ export interface ButtonPopoverProps extends ButtonProps, Pick<Popover2Props, 'po
 
 function ButtonPopoverBase(
   { popoverProps, content, disabled, position = 'bottom', ...props }: ButtonPopoverProps,
-  ref?: React.Ref<HTMLButtonElement>
+  ref?: React.LegacyRef<Button>
 ) {
   const [disablePopover, setDisablePopover] = useState(false);
   const button = <Button ref={ref} disabled={disabled} {...props} />;
