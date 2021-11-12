@@ -49,8 +49,8 @@ a:hover,
 }
 
 [data-theme^='dark'] {
-  .#{$ns}-popover.#{$ns}-popover {
-    .#{$ns}-popover-arrow {
+  .#{$ns}-popover2.#{$ns}-popover2 {
+    .#{$ns}-popover2-arrow {
       &:before {
         box-shadow: $pt-dark-elevation-shadow-0;
       }
@@ -60,14 +60,21 @@ a:hover,
       z-index: 1;
     }
 
-    .#{$ns}-popover-arrow-fill {
+    .#{$ns}-popover2-arrow-fill {
       fill: var(--primary-color);
     }
 
-    .#{$ns}-popover-content {
+    .#{$ns}-popover2-content {
       background-color: var(--primary-color);
       box-shadow: $pt-dark-elevation-shadow-0;
     }
+  }
+}
+
+.button-popover {
+  .#{$ns}-popover2-content {
+    padding: $pt-grid-size/2 $pt-grid-size;
+    white-space: nowrap;
   }
 }
 

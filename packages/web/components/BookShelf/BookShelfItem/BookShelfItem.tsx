@@ -38,7 +38,7 @@ export function BookShelfItem({ book }: Props) {
 
   if (book) {
     const basePath = `/book/${book.provider}/${book.name}`;
-    const active = query.provider === book.provider && query.bookName === book.name;
+    const active = !!book.name && query.provider === book.provider && query.bookName === book.name;
     return (
       <div className={[className, active ? classes['active'] : ''].join(' ').trim()}>
         <Link href={basePath} prefetch={false}>
