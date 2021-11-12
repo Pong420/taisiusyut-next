@@ -8,3 +8,17 @@
 .header {
   box-shadow: none;
 }
+
+.content {
+  @include sq-dimen(100%);
+  overflow: auto;
+}
+
+// .empty {
+//   @include sq-dimen(100%);
+//   margin-top: -1px; // for border
+
+//   button {
+//     width: 80px;
+//   }
+// }

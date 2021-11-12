@@ -26,16 +26,8 @@ export function BookModel({ cover, flatten, width = 60, className = '', modelCla
     <div className={`${classes['book-model-outer']} ${className}`.trim()} style={outerStyle}>
       <div className={[modelClassName, classes['book-model'], flatten ? classes['flatten'] : ''].join(' ').trim()}>
         <div className={classes['front']} style={{ transform: `rotateY(0deg) translateZ(${thickness / 2}px)` }}>
-          {cover ? (
-            <Image
-              layout="fixed"
-              alt="book cover"
-              src={cover}
-              width={width}
-              height={(width * 4) / 3}
-              draggable={false}
-            />
-          ) : null}
+          {/* eslint-disable-next-line */}
+          {cover ? <img alt="book cover" src={cover} width={width} height={(width * 4) / 3} draggable={false} /> : null}
         </div>
         <div
           className={classes['back']}

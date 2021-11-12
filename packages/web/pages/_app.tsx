@@ -4,6 +4,7 @@ import { Layout, LayoutProps } from '@/components/Layout';
 import { BookShelf } from '@/components/BookShelf';
 import { AuthProvider } from '@/hooks/useAuth';
 import { GoBackProvider } from '@/hooks/useGoBack';
+import { BookShelfProvider } from '@/hooks/useBookShelf';
 import { PreferencesProvider } from '@/hooks/usePreferences';
 import '@/styles/globals.scss';
 
@@ -27,13 +28,15 @@ function AppContent(props: ExtendAppProps) {
 
 function App(props: ExtendAppProps) {
   return (
-    <GoBackProvider>
-      <AuthProvider>
-        <PreferencesProvider>
-          <AppContent {...props} />
-        </PreferencesProvider>
-      </AuthProvider>
-    </GoBackProvider>
+    <PreferencesProvider>
+      <GoBackProvider>
+        <AuthProvider>
+          <BookShelfProvider>
+            <AppContent {...props} />
+          </BookShelfProvider>
+        </AuthProvider>
+      </GoBackProvider>
+    </PreferencesProvider>
   );
 }
 
