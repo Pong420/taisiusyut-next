@@ -1,1 +1,97 @@
 @import '~styles/helpers';
+
+.panel {
+  @include flex($flex-direction: column);
+  @include sq-dimen(100%);
+  background-color: var(--primary-color);
+}
+
+.border {
+  border-top: 1px solid var(--primary-color);
+  position: relative;
+  z-index: 11;
+}
+
+.content {
+  @include flex($flex-direction: column);
+  flex: 1 1 auto;
+  overflow: hidden;
+
+  @mixin single-page {
+    padding-top: 59px;
+  }
+
+  :global([data-display='single']) & {
+    @include single-page;
+  }
+
+  @media (max-width: $break-point) {
+    :global(html:not([data-display='single'])) & {
+      @include single-page;
+    }
+  }
+}
+
+.search-field {
+  @include dimen(100%);
+  @include flex(center);
+  @include relative(); // block the header's shadow border
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--divider-color);
+  flex: 0 0 auto;
+  padding: 10px 15px 15px;
+
+  :global([data-width='fixed']) & {
+    @media (min-width: $fix-width) {
+      @include margin-x(auto);
+      max-width: $fix-width;
+      width: 100%;
+      right: 0;
+    }
+  }
+
+  @mixin single-page {
+    @include fixed($header-height - 1, null, 0);
+    z-index: 10;
+  }
+
+  :global([data-display='single']) & {
+    @include single-page;
+  }
+
+  @media (max-width: $break-point) {
+    :global(html:not([data-display='single'])) & {
+      @include single-page;
+    }
+  }
+}
+
+.select {
+  flex: 0 0 auto;
+  margin-right: 10px;
+  select {
+    font-size: inherit;
+  }
+}
+
+.items {
+  overflow: auto;
+}
+
+// .not-found {
+//   flex: 1 1 auto;
+// }
+
+@mixin single-page {
+  .search {
+    background-color: var(--secondary-color);
+  }
+}
+
+:global([data-display='single']) {
+  @include single-page;
+}
+
+@media (max-width: $break-point) {
+  @include single-page;
+}

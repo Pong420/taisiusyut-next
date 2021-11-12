@@ -1,0 +1,77 @@
+@import '~styles/helpers';
+
+.item {
+  @include relative();
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  + .item {
+    &:before {
+      @include absolute(0, null, 5%);
+      @include dimen(90%);
+      border-top: 1px solid var(--divider-color);
+      content: '';
+    }
+  }
+
+  &:hover {
+    background-color: var(--item-hover-color);
+    .action-button {
+      visibility: visible;
+    }
+  }
+
+  &.active {
+    background-color: var(--item-active-color);
+  }
+
+  &:last-child {
+    margin-bottom: 20px;
+  }
+}
+
+.item-body {
+  @include flex();
+  overflow: hidden;
+  padding: 15px 15px 20px 15px;
+}
+
+.item-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.book-model {
+  align-self: center;
+}
+
+$line-height: 1.4em;
+$min-height: 1em;
+
+.book-name,
+.book-author,
+.book-updated-at {
+  @include dimen(100%);
+  clear: both;
+  float: left;
+  line-height: $line-height;
+}
+
+.book-author,
+.book-updated-at {
+  color: var(--text-light-color);
+  font-size: 0.85em;
+  margin-top: 0.35em;
+}
+
+.book-status {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  min-width: 3em;
+  min-height: 20px;
+
+  span {
+    display: block;
+  }
+}
