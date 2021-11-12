@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import router from 'next/router';
 import { IChapter } from '@/typings';
-import { Card, Classes, Divider, Icon, Tag } from '@blueprintjs/core';
-import { Toaster } from '@/utils/toaster';
+import { Card, Classes, Icon, Tag } from '@blueprintjs/core';
 import classes from './ChapterGrids.module.scss';
 
 export interface ChapterGridsProps {
@@ -12,8 +10,6 @@ export interface ChapterGridsProps {
   chapters: Partial<IChapter>[];
   lastVisit?: number;
 }
-
-const onFailure = Toaster.apiError.bind(Toaster, `Get chapters failure`);
 
 const itemClassName = [Classes.MENU_ITEM, classes['chapter-item']].join(' ');
 

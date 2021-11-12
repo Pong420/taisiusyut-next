@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from '@blueprintjs/core';
 import { Header } from '@/components/Layout/Header';
 import { ButtonPopover } from '@/components/ButtonPopover';
 import { ISearchResult } from '@/typings';

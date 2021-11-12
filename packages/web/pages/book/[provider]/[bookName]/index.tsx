@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { BookDetails, BookDetailsProps } from '@/components/BookDetails';
-import { getBookService, getSerializer } from '@taisiusyut-next/server';
+import { getBookService } from '@taisiusyut-next/server';
 
 export const getServerSideProps: GetServerSideProps<BookDetailsProps> = async context => {
   const { bookName, provider } = context.query;

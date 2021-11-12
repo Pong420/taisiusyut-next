@@ -10,14 +10,12 @@ interface Props extends CardProps {
   book: Partial<IBookDetails>;
   bookModelSize?: number;
   classes?: typeof defaultClasses;
-  flatten?: boolean;
 }
 
 export function BookInfoCard({
   classes: _classes,
   className = '',
   children,
-  flatten = true,
   bookModelSize = 70,
   book,
   ...props

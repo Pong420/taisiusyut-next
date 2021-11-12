@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BookModel } from '@/components/BookModel';
 import { Skelecton } from '@/components/Skelecton';
-import { BookShelf, useBookShelf } from '@/hooks/useBookShelf';
+import { BookShelf } from '@/hooks/useBookShelf';
 import classes from './BookShelfItem.module.scss';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 const bookModelWidth = 55;
 
 export function BookShelfItem({ book }: Props) {
-  const { asPath, query } = useRouter();
+  const { query } = useRouter();
   const latestChapter = book?.latestChapter;
 
   const className = classes['item'];

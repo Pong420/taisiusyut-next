@@ -12,7 +12,7 @@ interface ExtendAppProps extends AppProps {
   Component: AppProps['Component'] & {
     layoutProps?: Omit<LayoutProps, 'children'>;
     layout?: React.ComponentType<LayoutProps>;
-    leftPanel?: React.ComponentType<{}>;
+    leftPanel?: React.ComponentType<unknown>;
   };
 }
 

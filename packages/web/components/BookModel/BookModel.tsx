@@ -1,5 +1,4 @@
 import React, { CSSProperties } from 'react';
-import Image from 'next/image';
 import classes from './BookModel.module.scss';
 
 interface Props {
