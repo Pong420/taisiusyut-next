@@ -38,13 +38,8 @@ export class RefreshTokenService extends MongooseCRUDService<RefreshToken> imple
     const num = 1;
     try {
       await this.model.collection.dropIndex(`${index}_${num}`);
+      await this.model.collection.createIndex({ [index]: num }, { expireAfterSeconds: this.expireMiniues * 60 });
     } catch (error) {}
-    await this.model.collection.createIndex(
-      { [index]: num },
-      {
-        expireAfterSeconds: this.expireMiniues * 60
-      }
-    );
   }
 
   getCookieOpts(options?: Partial<CookieSerializeOptions>): CookieSerializeOptions {
