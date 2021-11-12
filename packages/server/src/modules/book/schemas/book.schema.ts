@@ -28,7 +28,7 @@ export class Book implements IBook, Timestamp {
   cover?: string;
 
   @Prop({ type: String, trim: true })
-  intro: string;
+  description: string;
 
   @Prop({ type: String, trim: true })
   latestChapter: string;

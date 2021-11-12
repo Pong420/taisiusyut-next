@@ -1,7 +1,9 @@
+import path from 'path';
 import chineseConv from 'chinese-conv';
 import { Injectable } from '@nestjs/common';
-import { IBook, ISearchResult } from '@/typings';
-import { Scraper, trimChapterName } from '..';
+import { IBookDetails, ISearchResult, IChapter } from '@/typings';
+import { Scraper } from '../scraper';
+import { trimChapterName } from '../utils';
 
 export const name = '筆趣閣';
 
@@ -16,19 +18,38 @@ export class BiqugeScraper extends Scraper {
     const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
     const name = $('#info h1').text();
     const author = $('#info p:nth-child(2)').text().split('：')[1];
-    const intro = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
-    const [chapter] = $('#list dl').children().toArray().slice(-1);
-    const $aTag = $(chapter).find('a');
-    const chapterName = $aTag.text()?.trim();
-    const latestChapter = trimChapterName(chapterName);
 
-    const book: Omit<IBook, 'id'> = {
+    const description = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
+
+    const $chapters = $('#list dl').children();
+    const flag = $('#list dt').last().index();
+
+    const chapters: IChapter[] = [];
+    let chapterNo = 1;
+
+    $chapters.each((index, el) => {
+      if (index > flag) {
+        const $aTag = $(el).find('a');
+        const originName = $aTag.text()?.trim();
+        const name = trimChapterName(originName);
+        const id = $aTag.attr('href');
+        if (id) {
+          chapters.push({ no: chapterNo, id: path.basename(id).replace(/\.html/, ''), name });
+          chapterNo++;
+        }
+      }
+    });
+
+    const [{ name: latestChapter }] = chapters.slice(-1);
+
+    const book: Omit<IBookDetails, 'id'> = {
       provider: this.name,
       bookID,
       name,
       author,
       cover,
-      intro,
+      chapters,
+      description,
       latestChapter
     };
 

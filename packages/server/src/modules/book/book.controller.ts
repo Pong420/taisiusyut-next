@@ -31,17 +31,15 @@ export class BookController {
   @Post('/')
   @UseGuards(AuthGuard('jwt'))
   async add(@Req() req: Request, @Body() payload: BookPayloadDto) {
-    const { bookID, provider } = payload;
-    const scraper = getScraper(provider);
+    const scraper = getScraper(payload.provider);
     if (scraper) {
-      const update = await scraper.getBook(payload.bookID);
-      const book = await this.bookService.findOneAndUpdate({ bookID }, update, { upsert: true });
+      const details = await scraper.getBook(payload.bookID);
+      const book = await this.bookService.findOneAndUpsert(details);
       if (book) {
         await this.userService.updateOne({ id: req.user?.id }, { $push: { books: book.id } });
         return book;
       }
     }
-
     throw new NotFoundException();
   }
 

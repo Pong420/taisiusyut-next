@@ -4,9 +4,19 @@ export interface IBook {
   name: string;
   author: string;
   cover?: string;
-  intro: string;
+  description: string;
   latestChapter: string;
   provider: string;
+}
+
+export interface IBookDetails extends Omit<IBook, 'id'> {
+  chapters: IChapter[];
+}
+
+export interface IChapter {
+  name: string;
+  id: string;
+  no: number;
 }
 
 export interface ISearchResult {
