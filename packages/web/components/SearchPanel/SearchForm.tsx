@@ -16,6 +16,10 @@ const { Form, FormItem, useForm } = createForm<Search>({ noStyle: true });
 
 export { useForm };
 
+export const transoform = (query: Record<string, any>): Search => {
+  return { value: query.q };
+};
+
 export function SearchForm(props: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 

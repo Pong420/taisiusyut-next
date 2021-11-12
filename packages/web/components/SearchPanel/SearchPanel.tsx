@@ -1,26 +1,56 @@
-import React from 'react';
-import router from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Button } from '@blueprintjs/core';
 import { Header } from '@/components/Layout/Header';
-import { SearchForm, useForm } from './SearchForm';
+import { ISearchResult } from '@/typings';
+import { Search, SearchForm, useForm, transoform } from './SearchForm';
+import { useSearchResult } from './useSearchResult';
 import { SearchItem } from './SearchItem';
 import classes from './SearchPanel.module.scss';
 
-const book = {};
-
 export function SearchPanel() {
+  const router = useRouter();
+  const { asPath, query } = router;
+  const [form] = useForm();
+  const [search, setSearch] = useState(() => transoform(asPath.startsWith('/search') ? query : {}));
+  const { state, scrollerRef } = useSearchResult(search);
+
+  const handleSearch = (search: Search) => {
+    setSearch(search);
+    router.push(
+      {
+        pathname: '/search',
+        query: { q: search.value }
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const items = state.list.map(book => <SearchItem key={book.bookID} book={book as ISearchResult} />);
+
+  useEffect(() => {
+    form.setFieldsValue(search);
+  }, [search, form]);
+
+  useEffect(() => {
+    if (asPath.startsWith('/search')) {
+      setSearch(search => {
+        const newSearch = transoform(query);
+        const hasChange = search.value !== newSearch.value;
+        return hasChange ? newSearch : search;
+      });
+    }
+  }, [asPath, query]);
+
   return (
     <div className={classes['panel']}>
       <Header title="搜索書籍" left={<Button icon="arrow-left" minimal onClick={() => router.back()} />}></Header>
       <div className={classes['content']}>
-        <SearchForm />
-
-        <div className={classes['items']}>
+        <SearchForm form={form} onFinish={handleSearch} />
+        <div className={classes['items']} ref={scrollerRef}>
           <div className={classes['border']} />
-
-          {Array.from({ length: 10 }, (_, idx) => (
-            <SearchItem book={book} key={idx}></SearchItem>
-          ))}
+          {items}
         </div>
       </div>
     </div>

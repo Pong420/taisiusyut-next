@@ -7,13 +7,13 @@ import { dayjs } from '@/utils/dayjs';
 import { ISearchResult } from '@/typings';
 import classes from './SearchItem.module.scss';
 
-interface Props {
-  book: Partial<ISearchResult>;
+export interface SearchItemProps {
+  book: Partial<ISearchResult> & { bookID: string };
 }
 
 const className = classes['item'];
 
-export function SearchItem({ book }: Props) {
+export function SearchItem({ book }: SearchItemProps) {
   const { asPath } = useRouter();
 
   const content = () => (
