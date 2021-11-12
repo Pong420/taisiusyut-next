@@ -1,9 +1,10 @@
 import path from 'path';
 import chineseConv from 'chinese-conv';
+import { CheerioAPI } from 'cheerio';
 import { Injectable } from '@nestjs/common';
 import { IBookDetails, ISearchResult, IChapter } from '@/typings';
 import { Scraper } from '../scraper';
-import { trimChapterName } from '../utils';
+import { trimChapterName, trimChapterContent } from '../utils';
 
 export const name = '筆趣閣';
 
@@ -13,14 +14,7 @@ export class BiqugeScraper extends Scraper {
     super(name, { baseURL: 'https://www.biquge5200.cc/' });
   }
 
-  async getBook(bookID: string) {
-    const { data: $ } = await this.http.get('/' + bookID);
-    const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
-    const name = $('#info h1').text();
-    const author = $('#info p:nth-child(2)').text().split('：')[1];
-
-    const description = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
-
+  protected _getChapters($: CheerioAPI) {
     const $chapters = $('#list dl').children();
     const flag = $('#list dt').last().index();
 
@@ -40,6 +34,18 @@ export class BiqugeScraper extends Scraper {
       }
     });
 
+    return chapters;
+  }
+
+  async getBook(bookID: string) {
+    const { data: $ } = await this.http.get('/' + bookID);
+    const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
+    const name = $('#info h1').text();
+    const author = $('#info p:nth-child(2)').text().split('：')[1];
+
+    const description = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
+
+    const chapters = this._getChapters($);
     const [{ name: latestChapter }] = chapters.slice(-1);
 
     const book: Omit<IBookDetails, 'id'> = {
@@ -54,6 +60,37 @@ export class BiqugeScraper extends Scraper {
     };
 
     return book;
+  }
+
+  async getChapters(bookID: string) {
+    const { data } = await this.http.get('/' + bookID);
+    return this._getChapters(data);
+  }
+
+  async getChapterContent(bookID: string, chapterID: string) {
+    const { data: $ } = await this.http.get(`/${bookID}/${chapterID}.html`);
+
+    const [prevChapter, , nextChapter] = $('.bottem1 a')
+      .toArray()
+      .slice(1, 4)
+      .map(el => path.basename($(el).attr('href') || '').replace('.html', ''));
+
+    const [bookName, fullChapterName] =
+      $("meta[name='keywords']")
+        .attr('content')
+        ?.split(',')
+        .map(str => str.replace(/ /g, '')) || [];
+
+    const chapterName = trimChapterName(fullChapterName);
+
+    const paragraph = trimChapterContent($('#content').text().trim(), { bookName, fullChapterName });
+
+    return {
+      chapterName,
+      nextChapter,
+      prevChapter,
+      paragraph
+    };
   }
 
   async searchBooks(name: string) {

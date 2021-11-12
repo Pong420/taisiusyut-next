@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { CheerioAPI } from 'cheerio';
-import { IBookDetails, ISearchResult } from '@/typings';
+import { IBookDetails, IChapter, ISearchResult, IChapterContent } from '@/typings';
 import { transformResponse } from './utils';
 
 const userAgent =
@@ -29,5 +29,7 @@ export abstract class Scraper {
   }
 
   abstract getBook(id: string): Promise<Omit<IBookDetails, 'id'>>;
+  abstract getChapters(id: string): Promise<IChapter[]>;
+  abstract getChapterContent(bookID: string, chapterID: string): Promise<IChapterContent>;
   abstract searchBooks(name: string): Promise<ISearchResult[]>;
 }

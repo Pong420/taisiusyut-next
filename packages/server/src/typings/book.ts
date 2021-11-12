@@ -19,6 +19,13 @@ export interface IChapter {
   no: number;
 }
 
+export interface IChapterContent {
+  chapterName: string;
+  nextChapter: string;
+  prevChapter: string;
+  paragraph: string[];
+}
+
 export interface ISearchResult {
   bookID: string;
   name: string;

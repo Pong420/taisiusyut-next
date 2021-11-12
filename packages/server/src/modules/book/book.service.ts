@@ -37,6 +37,7 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     const scraper = getScraper(provider);
 
     if (scraper) {
+      // TODO: memeroy cache ?
       const book = await this.findOne({ name, provider });
 
       if (book) {
@@ -60,5 +61,15 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     return this.findOneAndUpdate({ bookID: payload.bookID, provider: payload.provider }, this.prune(payload), {
       upsert: true
     });
+  }
+
+  async getChapterContent(provider: string, bookName: string, chapterID: string) {
+    const book = await this.findByName(bookName, provider);
+    const scraper = getScraper(provider);
+    if (book && scraper) {
+      const content = await scraper.getChapterContent(book.bookID, chapterID);
+      if (content) return content;
+    }
+    return null;
   }
 }

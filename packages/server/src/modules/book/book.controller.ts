@@ -5,6 +5,7 @@ import { UsersService } from '@/modules/users/users.service';
 import { getScraper } from './scraper/providers';
 import { BookPayloadDto } from './dto';
 import { BookService } from './book.service';
+
 @Controller('book')
 export class BookController {
   constructor(private readonly bookService: BookService, private readonly userService: UsersService) {}
