@@ -1,13 +1,24 @@
 import { nanoid } from 'nanoid';
 import { Request, Response } from 'express';
-import { Body, Controller, Post, Req, UseGuards, InternalServerErrorException, Res, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  UseGuards,
+  InternalServerErrorException,
+  Res,
+  HttpStatus,
+  BadRequestException
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from '@/modules/users/dto';
 import { UsersService } from '@/modules/users/users.service';
 import { User } from '@/modules/users/schemas/user.schema';
-import { IAuthenticated } from '@/typings';
+import { IAuthenticated, ICreateRefreshToken, IJWTSignPayload } from '@/typings';
 import { AuthService } from './auth.service';
 import { RefreshTokenService } from './refresh-token.service';
+import { RefreshToken } from './schemas/refreshToken.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -23,26 +34,52 @@ export class AuthController {
     const { user } = req;
     if (!user) throw new InternalServerErrorException(`user is ${user}`);
 
-    const refreshToken = this.refreshTokenService.getCookie(req) || nanoid();
+    const token = this.refreshTokenService.getCookie(req) || nanoid();
+    const refreshToken: ICreateRefreshToken = {
+      refreshToken: token,
+      user: user.id
+    };
 
-    await this.refreshTokenService.updateOne(
-      { refreshToken },
-      {
-        refreshToken,
-        id: user.id
-      },
-      { upsert: true }
-    );
+    await this.refreshTokenService.updateOne({ refreshToken: token }, refreshToken, { upsert: true });
 
     const response: IAuthenticated = {
       ...this.authService.signJwt(user)
     };
 
-    this.refreshTokenService.setCookie(res, refreshToken).status(HttpStatus.OK).send(response);
+    this.refreshTokenService.setCookie(res, token).status(HttpStatus.OK).send(response);
   }
 
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('/refresh-token')
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
+    const tokenFromCookies = this.refreshTokenService.getCookie(req);
+
+    if (tokenFromCookies) {
+      const newRefreshToken = nanoid();
+      const refreshToken: RefreshToken | null = await this.refreshTokenService.findOneAndUpdate(
+        { refreshToken: tokenFromCookies },
+        { refreshToken: newRefreshToken }
+      );
+
+      if (refreshToken) {
+        const user = await this.userService.findOne({ _id: refreshToken.user });
+
+        if (user) {
+          const { id, username, nickname } = user.toJSON();
+          const signPayload: IJWTSignPayload = { id, username, nickname };
+          const signResult = this.authService.signJwt(signPayload);
+          const response: IAuthenticated = {
+            ...signResult
+          };
+          return this.refreshTokenService.setCookie(res, newRefreshToken).status(HttpStatus.OK).send(response);
+        }
+      }
+
+      return res.status(HttpStatus.BAD_REQUEST).send(new BadRequestException('invalid refresh token'));
+    }
   }
 }
