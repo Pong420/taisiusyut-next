@@ -32,6 +32,17 @@ export function createUserForm({ large = false, ...itemProps }: UserFormItemProp
     </FormItem>
   );
 
+  const Email = ({ label = 'Email', ...props }: UserFormItemProps = {}) => (
+    <FormItem
+      {...props}
+      name="email"
+      label={label}
+      validators={[validators.required('Please input an email'), validators.emailFormat()]}
+    >
+      <Input large={large} autoComplete="email" type="email" />
+    </FormItem>
+  );
+
   const ConfirmPassword = ({
     visible,
     autoComplete = 'new-password',
@@ -52,6 +63,7 @@ export function createUserForm({ large = false, ...itemProps }: UserFormItemProp
 
   return {
     ...components,
+    Email,
     Username,
     Password,
     ConfirmPassword

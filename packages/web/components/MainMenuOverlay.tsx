@@ -43,7 +43,6 @@ export function MainMenuOverlay(props: MainMenuDialogProps) {
             {chevron}
           </div>
         }
-        onClick={() => alert('[WIP] Logout')}
       >
         帳號
       </AuthrizedListItem>

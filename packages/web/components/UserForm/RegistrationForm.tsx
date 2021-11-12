@@ -5,12 +5,14 @@ interface Props extends UserFormProps {
   head?: React.ReactNode;
 }
 
-const { Form, Username, Password, ConfirmPassword } = createUserForm();
+const { Form, Username, Email, Password, ConfirmPassword } = createUserForm();
 
 export function RegistrationForm({ head, children, ...props }: Props) {
   return (
     <Form {...props}>
       {head}
+
+      <Email />
 
       <Username />
 

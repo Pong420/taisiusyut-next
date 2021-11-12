@@ -61,6 +61,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
           if (options?.slient !== true) {
             Toaster.success({ message: 'Logout success' });
           }
+
           clearJwtToken();
 
           lastVisitStorage.clear();
