@@ -46,7 +46,11 @@ export class BookController {
   @Delete('/:id')
   @UseGuards(AuthGuard('jwt'))
   async remove(@Req() req: Request) {
-    await this.userService.updateOne({ id: req.user?.id }, { $pull: { books: req.params.id } });
-    return { message: 'success' };
+    const book = await this.bookService.findOne({ id: req.params.id });
+    if (book) {
+      await this.userService.updateOne({ id: req.user?.id }, { $pull: { books: req.params.id } });
+      return book;
+    }
+    throw new NotFoundException();
   }
 }
