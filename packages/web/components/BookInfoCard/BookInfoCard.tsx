@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Card, CardProps } from '@blueprintjs/core';
 import { BookModel } from '@/components/BookModel';
 import { Skelecton } from '@/components/Skelecton';
-import { IBook } from '@/typings';
+import { IBookDetails } from '@/typings';
 import defaultClasses from './BookInfoCard.module.scss';
 
 interface Props extends CardProps {
   author?: boolean;
-  book: Partial<IBook>;
+  book: Partial<IBookDetails>;
   bookModelSize?: number;
   classes?: typeof defaultClasses;
   flatten?: boolean;
@@ -42,7 +42,7 @@ export function BookInfoCard({
         </div>
 
         <div className={classes['description']}>
-          <Skelecton length={60}>{book.intro}</Skelecton>
+          <Skelecton length={60}>{book.description}</Skelecton>
         </div>
       </div>
 

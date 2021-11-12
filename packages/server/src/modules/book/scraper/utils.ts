@@ -16,10 +16,14 @@ export const transformResponse: AxiosResponseTransformer = (data: Buffer, respon
 };
 
 export function trimChapterName(name: string) {
-  const cnNum = '[零|一|二|三|四|五|六|七|八|九|十|百|千|0-9|〇]';
+  const cnNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千', '〇'];
+
   return (
     name
-      .replace(new RegExp(`^第.*${cnNum}[章|篇| ][：|、|?]?|[0-9]*、`, ''), '')
+      .replace(new RegExp(`^第.*[${cnNum.join('|')}|0-9][章|篇| ][：|、|?]?|[0-9]*、`, 'g'), '')
+      .replace(new RegExp(`[\(|（].*[${cnNum.join('|')}|0-9|加]更[\)|）]$`, 'g'), '')
+      .replace(new RegExp(`[\(|（](.*月票.*)[\)|）]$`, 'g'), '')
+      .replace(new RegExp(`[\(|（](.*盟.*)[\)|）]$`, 'g'), '')
       .replace(/^[0-9]+/, '')
       .trim()
       .replace(/ 新$/, '') || name

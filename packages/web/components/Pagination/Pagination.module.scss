@@ -1,0 +1,28 @@
+@import '~styles/helpers';
+
+.pagiation {
+  @include dimen(100%);
+  text-align: right;
+  margin-bottom: 5px;
+
+  :global {
+    .#{$ns}-button {
+      $size: 35px;
+      min-width: $size;
+      min-height: $size;
+
+      &.page-no {
+        font-size: 12px;
+      }
+    }
+
+    [data-theme^='light'] & {
+      .#{$ns}-button:not([class*=#{'' + $ns + '-intent-'}]):disabled,
+      .#{$ns}-button:not([class*=#{'' + $ns + '-intent-'}]).#{$ns}-disabled {
+        box-shadow: 
+          // prettier-ignore
+          inset 0 0 0 1px rgba(16, 22, 26, 0.2), inset 0 -1px 0 rgba(16, 22, 26, 0.1);
+      }
+    }
+  }
+}

@@ -2,11 +2,13 @@ import React from 'react';
 import { Header, HeaderProps } from '@/components/Layout/Header';
 import { BookInfoCard } from '@/components/BookInfoCard';
 import { GoBackButton } from '@/components/GoBackButton';
-import { IBook } from '@/typings';
+import { ChapterGrids } from '@/components/ChapterGrids';
+import { IBookDetails } from '@/typings';
+import { BookDetailsChapters } from './BookDetailsChapters';
 import classes from './BookDetails.module.scss';
 
 export interface BookDetailsProps {
-  book: IBook;
+  book: IBookDetails;
 }
 
 const headerProps: HeaderProps = {
@@ -16,11 +18,12 @@ const headerProps: HeaderProps = {
 
 export function BookDetails({ book }: BookDetailsProps) {
   return (
-    <div className={classes['book']}>
+    <>
       <Header {...headerProps}></Header>
-      <div style={{ padding: 15 }}>
-        <BookInfoCard book={book} className={classes['info']} />
+      <div className={classes['content']}>
+        <BookInfoCard book={book} />
+        <BookDetailsChapters chapters={book.chapters} />
       </div>
-    </div>
+    </>
   );
 }

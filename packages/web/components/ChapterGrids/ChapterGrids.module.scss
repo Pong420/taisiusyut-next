@@ -1,0 +1,58 @@
+@import '~styles/helpers';
+
+.grid-container {
+  @media (min-width: #{$break-point + 1}) {
+    @include flex($flex-direction: column);
+    flex: 1 1 auto;
+  }
+
+  @media (max-width: $break-point) {
+    display: none;
+  }
+
+  .chapter-head {
+    margin-left: 10px;
+  }
+}
+
+.head {
+  @media (min-width: 481px) {
+    font-size: 18px;
+  }
+}
+
+.grid {
+  margin-top: 20px;
+  display: grid;
+  grid-gap: 20px;
+
+  @media (min-width: #{$fix-width + 1}) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media (max-width: $fix-width) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .chapter-item {
+    align-self: baseline;
+  }
+
+  .tag {
+    margin-right: 1em;
+  }
+
+  .chapter-name {
+    flex: 1 1 auto;
+    &:empty {
+      @include dimen(80%, 20px);
+      content: '';
+      display: block;
+      background-color: rgba($gray3, 0.2);
+    }
+  }
+}
+
+:global(.#{$ns}-icon).map-maker.map-maker {
+  color: $red3 !important;
+}

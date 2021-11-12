@@ -1,1 +1,27 @@
 @import '~styles/helpers';
+
+.content {
+  @include flex($flex-direction: column);
+  @include sq-dimen(100%);
+  overflow: auto;
+  padding: 20px;
+  margin-bottom: env(safe-area-inset-bottom, 0);
+
+  > :global(.#{$ns}-card) {
+    + :global(.#{$ns}-card) {
+      margin-top: 20px;
+    }
+  }
+}
+
+.chapters {
+  margin-top: 15px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.divider {
+  @include margin-y(50px 15px);
+}
