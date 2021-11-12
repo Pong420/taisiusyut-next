@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider } from '@blueprintjs/core';
 import { IChapter } from '@/typings';
 import { ChapterGrids } from '@/components/ChapterGrids';
@@ -11,20 +11,20 @@ export interface BookDetailsChaptersProps {
 
 const pageSize = 30;
 
-export function BookDetailsChapters({ chapters: allChapters }: BookDetailsChaptersProps) {
-  const [chapters, setChapters] = useState(allChapters.slice(0, pageSize));
+export function BookDetailsChapters({ chapters }: BookDetailsChaptersProps) {
+  const [pageNo, setPageNo] = useState(1);
+  const start = (pageNo - 1) * pageSize;
 
-  const onPageChange = (pageNo: number) => {
-    const start = (pageNo - 1) * pageSize;
-    setChapters(allChapters.slice(start, start + pageSize));
-  };
+  useEffect(() => {
+    setPageNo(1);
+  }, [chapters]);
 
   return (
     <div className={classes['chapters']}>
-      <ChapterGrids chapters={chapters.slice(0, 30)}>
+      <ChapterGrids chapters={chapters.slice(start, start + pageSize)}>
         <div className={classes['spacer']} />
         <Divider className={classes['divider']} />
-        <Pagination onPageChange={onPageChange} pageSize={pageSize} total={allChapters.length} />
+        <Pagination onPageChange={setPageNo} pageSize={pageSize} total={chapters.length} />
       </ChapterGrids>
     </div>
   );

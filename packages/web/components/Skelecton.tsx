@@ -4,6 +4,7 @@ export interface SkelectonProps {
   length: number;
   fill?: string;
   children?: React.ReactNode;
+  emptyString?: boolean;
   disabled?: boolean;
 }
 
@@ -20,7 +21,8 @@ export const skelectonStyle: React.CSSProperties = {
   wordBreak: 'break-all'
 };
 
-export function Skelecton({ fill = '\t', length, children, disabled = false }: SkelectonProps) {
+export function Skelecton({ fill = '\t', length, children, disabled = false, emptyString = true }: SkelectonProps) {
+  if (!emptyString && children === '') return null;
   return children || disabled ? (
     <>{children}</>
   ) : (
