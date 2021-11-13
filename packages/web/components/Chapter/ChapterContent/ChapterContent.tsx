@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { Button, Icon } from '@blueprintjs/core';
 import { useRxAsync } from '@/hooks/useRxAsync';
-import { useAuthState } from '@/hooks/useAuth';
 import { getChapterContent } from '@/service';
 import { IChapterContent } from '@/typings';
 import classes from './ChapterContent.module.scss';
@@ -11,23 +10,23 @@ export interface Props {
   bookName: string;
   chapterNo: number;
   defaultChapter?: IChapterContent;
-  onLoaded: (chapter: IChapterContent) => void;
+  onLoaded: (payload: { chapterNo: number; chapter: IChapterContent }) => void;
 }
 
 export const ChapterContentLoading = <div className={classes['loading']}>LOADING</div>;
 
 export const ChapterContent = React.memo(({ provider, bookName, chapterNo, onLoaded, defaultChapter }: Props) => {
-  const { loginStatus } = useAuthState();
-  const waitingAuth = loginStatus === 'unknown' || loginStatus === 'loading';
   const request = useCallback(
-    () => getChapterContent({ provider, bookName, chapterNo }),
+    () => getChapterContent({ provider, bookName, chapterNo }).then(chapter => ({ chapter, chapterNo })),
     [provider, bookName, chapterNo]
   );
 
-  const [{ data: chapter = defaultChapter, error }, { fetch }] = useRxAsync(request, {
-    defer: !!defaultChapter || waitingAuth,
+  const [{ data, error }, { fetch }] = useRxAsync(request, {
+    defer: !!defaultChapter,
     onSuccess: onLoaded
   });
+
+  const { chapter = defaultChapter } = data || {};
 
   if (error) {
     const handleRetry = (event: React.MouseEvent<HTMLElement>) => {
@@ -58,7 +57,7 @@ export const ChapterContent = React.memo(({ provider, bookName, chapterNo, onLoa
     return (
       <>
         <div className={classes['chapter-name']}>{`${prefix} ${chapter.name}`}</div>
-        {chapter.paragraph.map((text, idx) => (
+        {chapter?.paragraph?.map((text, idx) => (
           <div key={idx} className={classes['paragraph']}>
             {text}
           </div>

@@ -65,7 +65,7 @@ function ChapterComponment({
   );
 
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const hasNext = useRef(initialChapter ? initialChapter.nextChapter : false);
+  const hasNext = useRef(initialChapter ? !!initialChapter.nextChapter : false);
   const loaded = useRef<Record<string, boolean>>({
     [initialChapterNo]: !!initialChapter
   });
@@ -97,24 +97,20 @@ function ChapterComponment({
   //   return gotoChapter({ provider, bookName, chapterNo });
   // };
 
-  const handleChapterLoaded = useCallback(
-    (chapter: IChapterContent) => {
-      hasNext.current = chapter.nextChapter;
-      loaded.current[currentChapter] = true;
+  const handleChapterLoaded = useCallback(({ chapterNo, chapter }: { chapterNo: number; chapter: IChapterContent }) => {
+    hasNext.current = !!chapter.nextChapter;
+    loaded.current[chapterNo] = true;
 
-      setData(data => ({ ...data, [currentChapter]: chapter }));
+    setData(data => ({ ...data, [chapterNo]: chapter }));
 
-      // trigger checking after loaded, for small content or large screen.
-      // should not dispatch both at the same time because one of the value of `scrollTop` must be 0
-      // and hence -1 may return and cause conflict
-      if (window.scrollY) {
-        window.dispatchEvent(new Event('scroll'));
-      } else {
-        scrollerRef.current?.dispatchEvent(new Event('scroll'));
-      }
-    },
-    [currentChapter]
-  );
+    // for less content or large screen, the content may not scrollable
+    // so dispatch scroll event to trigger checking after content loaded
+    if (window.scrollY) {
+      window.dispatchEvent(new Event('scroll'));
+    } else {
+      scrollerRef.current?.dispatchEvent(new Event('scroll'));
+    }
+  }, []);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -242,7 +238,7 @@ function ChapterComponment({
   }, [bookName, provider, initialChapter, initialChapterNo, autoFetchNextChapter, setRecords]);
 
   useEffect(() => {
-    hasNext.current = data[currentChapter]?.nextChapter;
+    hasNext.current = !!data[currentChapter]?.nextChapter;
   }, [data, currentChapter]);
 
   useEffect(() => {
