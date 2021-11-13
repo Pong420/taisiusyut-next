@@ -21,6 +21,8 @@ export class BookShelfService extends MongooseCRUDService<BookShelf> implements 
       await this.bookShelfModel.collection.dropIndex(indexName);
     } catch (error) {}
 
-    await this.bookShelfModel.collection.createIndex(index, { unique: true });
+    try {
+      await this.bookShelfModel.collection.createIndex(index, { unique: true });
+    } catch {}
   }
 }

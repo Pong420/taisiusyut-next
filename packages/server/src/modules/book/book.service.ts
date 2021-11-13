@@ -22,9 +22,11 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     try {
       const indexName = JSON.stringify(index).replace(/"|{|}/g, '').replace(/:|,/g, '_');
       await this.model.collection.dropIndex(indexName);
-    } catch (error) {}
+    } catch {}
 
-    await this.bookModel.collection.createIndex(index, { unique: true });
+    try {
+      await this.bookModel.collection.createIndex(index, { unique: true });
+    } catch {}
   }
 
   prune<T extends Partial<IBookDetails>>({ chapters, ...payload }: T) {
@@ -40,7 +42,7 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
 
     if (scraper) {
       // TODO: memeroy cache ?
-      const book = await this.findOne({ bookName, provider });
+      const book = await this.findOne({ name: bookName, provider });
 
       if (book) {
         return scraper.getBook(book.bookID);
