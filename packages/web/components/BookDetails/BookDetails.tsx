@@ -13,7 +13,7 @@ export interface BookDetailsProps {
 
 const headerProps: HeaderProps = {
   title: '書籍詳情',
-  left: <GoBackButton />
+  left: <GoBackButton targetPath={['/', '/search']} />
 };
 
 export function BookDetails({ book }: BookDetailsProps) {
