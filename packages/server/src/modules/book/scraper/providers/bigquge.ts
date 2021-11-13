@@ -73,7 +73,10 @@ export class BiqugeScraper extends Scraper {
     const [prevChapter, , nextChapter] = $('.bottem1 a')
       .toArray()
       .slice(1, 4)
-      .map(el => path.basename($(el).attr('href') || '').replace('.html', ''));
+      .map(el => {
+        const id = path.basename($(el).attr('href') || '').replace('.html', '');
+        return id === bookID ? null : id;
+      });
 
     const [bookName, fullChapterName] =
       $("meta[name='keywords']")

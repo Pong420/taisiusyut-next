@@ -21,9 +21,9 @@ export interface IChapter {
 
 export interface IChapterContent {
   name: string;
-  nextChapter: string;
-  prevChapter: string;
   paragraph: string[];
+  nextChapter: string | null;
+  prevChapter: string | null;
 }
 
 export interface ISearchResult {
