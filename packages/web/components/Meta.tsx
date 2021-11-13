@@ -19,7 +19,7 @@ export function Meta({
   robots = 'all'
 }: Props) {
   return (
-    <>
+    <Head>
       <title key="title">{title}</title>
 
       <meta key="robots" name="robots" content={robots} />
@@ -34,7 +34,7 @@ export function Meta({
       <meta key="og:url" property="og:url" content={ORIGIN} />
       <meta key="og:image" property="og:image" content={`${ORIGIN}/icons/apple-touch-icon.png`} />
       {children}
-    </>
+    </Head>
   );
 }
 

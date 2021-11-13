@@ -6,6 +6,7 @@ import { BookShelfToggle } from '@/components/BookShelf/BookShelfToggle';
 import { IBookDetails } from '@/typings';
 import { BookDetailsChapters } from './BookDetailsChapters';
 import classes from './BookDetails.module.scss';
+import { Meta } from '../Meta';
 
 export interface BookDetailsProps {
   book: IBookDetails;
@@ -19,6 +20,7 @@ const headerProps: HeaderProps = {
 export function BookDetails({ book }: BookDetailsProps) {
   return (
     <>
+      <Meta title={`${book.name} | 睇小說`} />
       <Header
         {...headerProps}
         right={[<BookShelfToggle key="0" icon minimal bookID={book.bookID} provider={book.provider} />]}

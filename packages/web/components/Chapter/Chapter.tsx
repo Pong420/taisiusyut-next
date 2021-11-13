@@ -4,6 +4,7 @@ import { fromEvent, merge } from 'rxjs';
 import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
 import { Button } from '@blueprintjs/core';
 import { IChapter, IChapterContent, IGetChapterContent } from '@/typings';
+import { Meta } from '@/components/Meta';
 import { openPreferences } from '@/components/PreferencesOverlay';
 import { useChapterListDrawer } from '@/components/ChapterListDrawer';
 import { Preferences, usePreferences } from '@/hooks/usePreferences';
@@ -43,9 +44,6 @@ const getMarginY = (el: Element) => {
   const style = window.getComputedStyle(el);
   return parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
 };
-
-export const chapterDocumentTitle = (chapterNo: number, bookName: string, prefix = `第${chapterNo}章`) =>
-  `${bookName} | ${prefix} | 睇小說`;
 
 function ChapterComponment({
   bookName,
@@ -244,7 +242,7 @@ function ChapterComponment({
   }, [data, currentChapter]);
 
   useEffect(() => {
-    document.title = `${bookName} | 第${currentChapter}章 | 睇小說`;
+    // document.title = `${bookName} | 第${currentChapter}章 | 睇小說`;
     lastVisitStorage.set(bookName, currentChapter);
   }, [currentChapter, bookName]);
 
@@ -297,6 +295,7 @@ function ChapterComponment({
 
     return (
       <div className={[classes['container'], classes[scrollDirection]].join(' ').trim()}>
+        <Meta title={`${bookName} | 第${currentChapter}章 | 睇小說`} />
         {/* <FixedChapterName title={title} /> */}
         <ChapterHeader title={title} openPreferences={openPreferences} openChapterListDrawer={_openChapterListDrawer} />
         {/* <ChapterOverlay

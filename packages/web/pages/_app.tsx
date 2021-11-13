@@ -1,5 +1,6 @@
 import React from 'react';
 import type { AppProps /*, AppContext */ } from 'next/app';
+import { Meta, CommonMeta } from '@/components/Meta';
 import { Layout, LayoutProps } from '@/components/Layout';
 import { BookShelf } from '@/components/BookShelf';
 import { AuthProvider } from '@/hooks/useAuth';
@@ -32,6 +33,8 @@ function App(props: ExtendAppProps) {
       <GoBackProvider>
         <AuthProvider>
           <BookShelfProvider>
+            <Meta />
+            <CommonMeta />
             <AppContent {...props} />
           </BookShelfProvider>
         </AuthProvider>
