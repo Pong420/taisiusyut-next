@@ -25,7 +25,7 @@ export function BookDetails({ book }: BookDetailsProps) {
       />
       <div className={classes['content']}>
         <BookInfoCard book={book} />
-        <BookDetailsChapters chapters={book.chapters} />
+        <BookDetailsChapters bookName={book.name} provider={book.provider} chapters={book.chapters} />
       </div>
     </>
   );

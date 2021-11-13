@@ -1,0 +1,79 @@
+@import '~styles/helpers';
+
+$fixed-chapter-name-font: 12px;
+$fixed-chapter-name-padding-y: 10px;
+$fixed-chapter-name-height: $fixed-chapter-name-padding-y * 2 + $fixed-chapter-name-font;
+
+@mixin paragraph-padding-x {
+  @media (max-width: 480px) {
+    @include padding-x(20px);
+  }
+
+  @media (min-width: 481px) {
+    @include padding-x(40px);
+  }
+}
+
+.container {
+  @include sq-dimen(100%);
+
+  @media (min-width: #{$break-point + 1}) {
+    @include flex($flex-direction: column);
+    overflow: hidden;
+  }
+
+  @media (max-width: $break-point) {
+    @include relative(-$header-height);
+
+    &.down {
+      .fixed-chapter-name {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+.header {
+  @media (max-width: $break-point) {
+    display: none;
+  }
+}
+
+.scroller {
+  @include sq-dimen(100%);
+  @include paragraph-padding-x;
+  overflow: auto;
+}
+
+.content {
+  $margin-bottom: 40px;
+  @include flex($flex-direction: column);
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+  margin-bottom: $margin-bottom; // this make sure content scrollable
+  padding-top: 40px;
+  overflow: hidden;
+
+  &:last-child {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+.next-chapter {
+  @include paragraph-padding-x;
+  margin-top: 20px;
+  margin-bottom: calc(40px + env(safe-area-inset-bottom, 0));
+}
+
+.fixed-chapter-name {
+  @include animate(transform);
+  @include dimen(100%);
+  @include fixed(-1px, null, 0);
+  @include padding-y(10px);
+  @include paragraph-padding-x;
+  background-color: var(--secondary-color);
+  color: var(--text-light-color);
+  font-size: $fixed-chapter-name-font;
+  line-height: 1em;
+  transform: translateY(-100%);
+}

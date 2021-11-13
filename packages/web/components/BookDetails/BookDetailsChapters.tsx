@@ -6,12 +6,14 @@ import { Pagination } from '@/components/Pagination';
 import classes from './BookDetails.module.scss';
 
 export interface BookDetailsChaptersProps {
+  provider: string;
+  bookName: string;
   chapters: IChapter[];
 }
 
 const pageSize = 30;
 
-export function BookDetailsChapters({ chapters }: BookDetailsChaptersProps) {
+export function BookDetailsChapters({ provider, bookName, chapters }: BookDetailsChaptersProps) {
   const [pageNo, setPageNo] = useState(1);
   const start = (pageNo - 1) * pageSize;
 
@@ -21,7 +23,7 @@ export function BookDetailsChapters({ chapters }: BookDetailsChaptersProps) {
 
   return (
     <div className={classes['chapters']}>
-      <ChapterGrids chapters={chapters.slice(start, start + pageSize)}>
+      <ChapterGrids provider={provider} bookName={bookName} chapters={chapters.slice(start, start + pageSize)}>
         <div className={classes['spacer']} />
         <Divider className={classes['divider']} />
         <Pagination onPageChange={setPageNo} pageSize={pageSize} total={chapters.length} />

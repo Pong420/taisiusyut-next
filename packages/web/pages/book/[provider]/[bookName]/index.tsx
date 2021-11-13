@@ -4,9 +4,9 @@ import { getBookService } from '@taisiusyut-next/server';
 
 export const getServerSideProps: GetServerSideProps<BookDetailsProps> = async context => {
   const { bookName, provider } = context.query;
-  const [service] = await Promise.all([getBookService()]);
+  const service = await getBookService();
   if (typeof bookName === 'string' && typeof provider === 'string') {
-    const book = await service.findByName(bookName, provider);
+    const book = await service.findByName({ bookName, provider });
     if (book) {
       return { props: { book } };
     }
@@ -14,6 +14,6 @@ export const getServerSideProps: GetServerSideProps<BookDetailsProps> = async co
   return { notFound: true };
 };
 
-export default function BookPage(props: BookDetailsProps) {
+export default function BookDetailPage(props: BookDetailsProps) {
   return <BookDetails {...props} />;
 }

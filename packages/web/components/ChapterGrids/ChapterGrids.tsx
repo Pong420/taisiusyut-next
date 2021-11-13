@@ -6,6 +6,7 @@ import classes from './ChapterGrids.module.scss';
 
 export interface ChapterGridsProps {
   bookName?: string;
+  provider?: string;
   children?: React.ReactNode;
   chapters: Partial<IChapter>[];
   lastVisit?: number;
@@ -13,7 +14,7 @@ export interface ChapterGridsProps {
 
 const itemClassName = [Classes.MENU_ITEM, classes['chapter-item']].join(' ');
 
-export function ChapterGrids({ bookName, chapters, children, lastVisit }: ChapterGridsProps) {
+export function ChapterGrids({ bookName, provider, chapters, children, lastVisit }: ChapterGridsProps) {
   const maxLength = String(chapters.slice(-1)[0]?.no || '').length;
 
   return (
@@ -35,9 +36,9 @@ export function ChapterGrids({ bookName, chapters, children, lastVisit }: Chapte
             </>
           );
 
-          if (bookName) {
+          if (bookName && provider) {
             return (
-              <Link key={chapter.id} prefetch={false} href={`/book/${bookName}/chapter/${chapter.no}`}>
+              <Link key={chapter.id} prefetch={false} href={`/book/${provider}/${bookName}/${chapter.no}`}>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a className={itemClassName}>{content}</a>
               </Link>
