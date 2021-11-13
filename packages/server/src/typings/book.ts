@@ -20,7 +20,7 @@ export interface IChapter {
 }
 
 export interface IChapterContent {
-  chapterName: string;
+  name: string;
   nextChapter: string;
   prevChapter: string;
   paragraph: string[];

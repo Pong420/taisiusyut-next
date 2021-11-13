@@ -86,7 +86,7 @@ export class BiqugeScraper extends Scraper {
     const paragraph = trimChapterContent($('#content').text().trim(), { bookName, fullChapterName });
 
     return {
-      chapterName,
+      name: chapterName,
       nextChapter,
       prevChapter,
       paragraph
