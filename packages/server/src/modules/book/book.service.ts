@@ -5,6 +5,7 @@ import { MongooseCRUDService } from '@/utils/mongoose-crud.service';
 import { IBookDetails } from '@/typings';
 import { Book, BookDocument } from './schemas/book.schema';
 import { getScraper } from './scraper/providers';
+import { GetChapterContentDto } from './dto';
 
 @Injectable()
 export class BookService extends MongooseCRUDService<Book> implements OnModuleInit {
@@ -33,19 +34,19 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     return super.create(this.prune(payload));
   }
 
-  async findByName(name: string, provider?: string): Promise<IBookDetails | null> {
+  async findByName({ bookName, provider }: { bookName: string; provider?: string }): Promise<IBookDetails | null> {
     const scraper = getScraper(provider);
 
     if (scraper) {
       // TODO: memeroy cache ?
-      const book = await this.findOne({ name, provider });
+      const book = await this.findOne({ bookName, provider });
 
       if (book) {
         return scraper.getBook(book.bookID);
       }
 
-      const results = await scraper.searchBooks(name);
-      const result = results.find(b => b.name === name);
+      const results = await scraper.searchBooks(bookName);
+      const result = results.find(b => b.name === bookName);
 
       if (result) {
         const payload = await scraper.getBook(result.bookID);
@@ -63,12 +64,19 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     });
   }
 
-  async getChapterContent(provider: string, bookName: string, chapterID: string) {
-    const book = await this.findByName(bookName, provider);
+  async getChapterContent({ provider, bookName, chapterNo }: GetChapterContentDto) {
+    const book = await this.findByName({ bookName, provider });
     const scraper = getScraper(provider);
+
     if (book && scraper) {
-      const content = await scraper.getChapterContent(book.bookID, chapterID);
-      if (content) return content;
+      const chapter = book.chapters
+        .slice(Math.max(0, chapterNo - 10), chapterNo + 10)
+        .find(chapter => chapterNo === chapter.no);
+
+      if (chapter) {
+        const content = await scraper.getChapterContent(book.bookID, chapter.id);
+        if (content) return content;
+      }
     }
     return null;
   }

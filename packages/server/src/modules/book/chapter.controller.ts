@@ -1,22 +1,26 @@
-import { Request } from 'express';
-import { Controller, Get, NotFoundException, Req } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { BookService } from './book.service';
+import { GetChapterContentDto, GetChaptersDto } from './dto';
 
 @Controller('chapter')
 export class ChapterController {
   constructor(private readonly bookService: BookService) {}
 
   @Get('/:provider/:bookName')
-  async getChapters(@Req() req: Request) {
-    const { bookName, provider } = req.params;
-    const book = await this.bookService.findByName(bookName, provider);
+  async getChapters(@Param() { bookName, provider }: GetChaptersDto) {
+    const book = await this.bookService.findByName({ bookName, provider });
     if (!book) throw new NotFoundException();
     return book.chapters;
   }
 
-  @Get('/:provider/:bookName/:chapterID')
-  async getChapterContent(@Req() req: Request) {
-    const { bookName, provider, chapterID } = req.params;
-    return this.bookService.getChapterContent(bookName, provider, chapterID);
+  @Get('/:provider/:bookName/:chapterNo')
+  async getChapterContent(@Param() payload: GetChapterContentDto) {
+    const content = await this.bookService.getChapterContent(payload);
+
+    if (!content) {
+      throw new NotFoundException();
+    }
+
+    return content;
   }
 }

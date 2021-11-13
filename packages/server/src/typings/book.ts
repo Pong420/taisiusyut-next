@@ -40,3 +40,14 @@ export interface IBookPayload {
   bookID: string;
   provider: string;
 }
+
+export interface IGetChapters {
+  bookName: string;
+  provider: string;
+}
+
+export interface IGetChapterContent {
+  chapterNo: number;
+  bookName: string;
+  provider: string;
+}
