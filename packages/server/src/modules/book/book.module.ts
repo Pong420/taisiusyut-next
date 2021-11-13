@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from '@/modules/users/users.module';
 import { BookController } from './book.controller';
+import { BookShelfController } from './book-shelf.controller';
 import { ChapterController } from './chapter.controller';
 import { BookService } from './book.service';
+import { BookShelfService } from './book-shelf.service';
 import { Book, BookSchema } from './schemas/book.schema';
+import { BookShelf, BookShelfSchema } from './schemas/book-shelf.schema';
 
 @Module({
   imports: [
-    UsersModule,
-    MongooseModule.forFeatureAsync([
+    MongooseModule.forFeature([
       {
         name: Book.name,
-        useFactory: async () => {
-          return BookSchema;
-        }
+        schema: BookSchema
+      },
+      {
+        name: BookShelf.name,
+        schema: BookShelfSchema
       }
     ])
   ],
-  controllers: [BookController, ChapterController],
-  providers: [BookService]
+  controllers: [BookController, ChapterController, BookShelfController],
+  providers: [BookService, BookShelfService]
 })
 export class BookModule {}

@@ -6,7 +6,6 @@ export interface IUser extends CreatedAt {
   username: string;
   password: string;
   nickname: string;
-  books: string[];
 }
 
 export interface ICreateUser {

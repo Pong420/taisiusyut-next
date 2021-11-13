@@ -22,8 +22,9 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     try {
       const indexName = JSON.stringify(index).replace(/"|{|}/g, '').replace(/:|,/g, '_');
       await this.model.collection.dropIndex(indexName);
-      await this.bookModel.collection.createIndex(index, { unique: true });
     } catch (error) {}
+
+    await this.bookModel.collection.createIndex(index, { unique: true });
   }
 
   prune<T extends Partial<IBookDetails>>({ chapters, ...payload }: T) {

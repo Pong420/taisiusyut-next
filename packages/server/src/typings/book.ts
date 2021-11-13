@@ -1,3 +1,5 @@
+import { Timestamp } from './common';
+
 export interface IBook {
   id: string;
   bookID: string;
@@ -50,4 +52,10 @@ export interface IGetChapterContent {
   chapterNo: number;
   bookName: string;
   provider: string;
+}
+
+export interface IBookShelf extends Timestamp {
+  id: string;
+  book: IBook;
+  lastVistChapter?: number;
 }

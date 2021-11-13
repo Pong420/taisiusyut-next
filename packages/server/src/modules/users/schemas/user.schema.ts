@@ -1,7 +1,7 @@
 import { IUser } from '@/typings';
 import { Exclude, Transform } from 'class-transformer';
 import { Prop, PropOptions, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import { Timestamp } from '@/typings';
 import bcrypt from 'bcrypt';
 
@@ -43,9 +43,6 @@ export class User implements IUser, Timestamp {
 
   @Exclude()
   updatedAt: number;
-
-  @Prop({ type: [Types.ObjectId] })
-  books: string[];
 
   constructor(payload: Partial<User>) {
     Object.assign(this, payload);

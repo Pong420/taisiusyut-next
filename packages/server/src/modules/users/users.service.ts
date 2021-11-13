@@ -12,6 +12,6 @@ export class UsersService extends MongooseCRUDService<User, UserDocument> {
   }
 
   async create(createCatDto: CreateUserDto) {
-    return super.create({ ...createCatDto, books: [] });
+    return super.create({ ...createCatDto });
   }
 }
