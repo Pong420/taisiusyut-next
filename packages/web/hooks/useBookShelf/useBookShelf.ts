@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext } from 'react';
 import { StateContext, ActionContext } from './bookShelfProvider';
 
 export function useBookShelfState() {

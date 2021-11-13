@@ -12,8 +12,9 @@ interface Props {
 
 const bookModelWidth = 55;
 
-export function BookShelfItem({ book }: Props) {
+export function BookShelfItem({ book: shelf }: Props) {
   const { query } = useRouter();
+  const { book } = shelf;
   const latestChapter = book?.latestChapter;
 
   const className = classes['item'];

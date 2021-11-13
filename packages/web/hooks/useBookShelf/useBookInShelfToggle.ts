@@ -12,7 +12,7 @@ type Action = {
 
 export function useBookInShelfToggle({ bookID, provider }: IBookPayload) {
   const [state, actions] = useBookShelf();
-  const book = state.list.find(b => b.bookID !== undefined && b.bookID === b.bookID && b.provider === b.provider);
+  const book = state.list.find(b => b.book !== undefined && b.book.bookID === bookID && b.book.provider === provider);
   const { id } = book || {};
 
   const { request, onSuccess, onFailure } = useMemo(() => {

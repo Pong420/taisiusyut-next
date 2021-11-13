@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { defer } from 'rxjs';
 import { useAuthState } from '@/hooks/useAuth';
 import { getBookShelf } from '@/service';
-import { IBook } from '@/typings';
+import { IBookShelf } from '@/typings';
 import { Toaster } from '@/utils/toaster';
 import { createUseCRUDReducer } from '@/hooks/crud-reducer';
 
-export type BookShelf = Partial<IBook> & {
+export type BookShelf = Partial<IBookShelf> & {
   id: string;
 };
 
