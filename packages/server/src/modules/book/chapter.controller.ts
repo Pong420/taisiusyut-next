@@ -15,12 +15,12 @@ export class ChapterController {
 
   @Get('/:provider/:bookName/:chapterNo')
   async getChapterContent(@Param() payload: GetChapterContentDto) {
-    const content = await this.bookService.getChapterContent(payload);
+    const result = await this.bookService.getChapterContent(payload);
 
-    if (!content) {
+    if (!result) {
       throw new NotFoundException();
     }
 
-    return content;
+    return result.chapter;
   }
 }

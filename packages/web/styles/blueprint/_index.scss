@@ -31,6 +31,7 @@ $pt-dark-divider-black: rgba(255, 255, 255, 0.15);
 }
 
 .#{$ns}-dark {
+  .#{$ns}-drawer.#{$ns}-drawer,
   .#{$ns}-card.#{$ns}-card {
     background-color: var(--primary-color);
   }

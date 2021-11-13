@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseCRUDService } from '@/utils/mongoose-crud.service';
-import { IBookDetails, IChapterContent } from '@/typings';
+import { IBookDetails } from '@/typings';
 import { Book, BookDocument } from './schemas/book.schema';
 import { getScraper } from './scraper/providers';
 import { GetChapterContentDto } from './dto';
@@ -64,7 +64,7 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
     });
   }
 
-  async getChapterContent({ provider, bookName, chapterNo }: GetChapterContentDto): Promise<IChapterContent | null> {
+  async getChapterContent({ provider, bookName, chapterNo }: GetChapterContentDto) {
     const book = await this.findByName({ bookName, provider });
     const scraper = getScraper(provider);
 
@@ -75,7 +75,7 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
 
       if (chapter) {
         const content = await scraper.getChapterContent(book.bookID, chapter.id);
-        if (content) return content;
+        if (content) return { chapter: content, chapters: book.chapters };
       }
     }
     return null;

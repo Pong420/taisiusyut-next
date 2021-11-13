@@ -3,8 +3,9 @@ import router from 'next/router';
 import { fromEvent, merge } from 'rxjs';
 import { distinctUntilChanged, filter, map, pairwise } from 'rxjs/operators';
 import { Button } from '@blueprintjs/core';
-import { IChapterContent, IGetChapterContent } from '@/typings';
+import { IChapter, IChapterContent, IGetChapterContent } from '@/typings';
 import { openPreferences } from '@/components/PreferencesOverlay';
+import { useChapterListDrawer } from '@/components/ChapterListDrawer';
 import { Preferences, usePreferences } from '@/hooks/usePreferences';
 import { useGoBack } from '@/hooks/useGoBack';
 import { lastVisitStorage } from '@/utils/storage';
@@ -20,6 +21,7 @@ export type ChapterParams = {
 
 export interface ChapterData extends ChapterParams {
   chapter: IChapterContent | null;
+  chapters: IChapter[];
 }
 
 export interface ChapterProps extends Omit<ChapterData, 'bookID'> {
@@ -49,6 +51,7 @@ function ChapterComponment({
   bookName,
   provider,
   chapter: initialChapter,
+  chapters: initialChapters,
   chapterNo: initialChapterNo,
   preferences,
   openPreferences
@@ -56,10 +59,7 @@ function ChapterComponment({
   const [chapterNums, setChapterNums] = useState([initialChapterNo]);
   const [currentChapter, setCurrentChapter] = useState(initialChapterNo);
 
-  // `chapters` and `data` are similiar but not same
-  // The chapter value in `chapters` contain the required data for chapter list only
-  // But data contain all property of a chapter
-  // const [openChapterListDrawer, chapters] = useChapterListDrawer(bookID);
+  const [openChapterListDrawer, chapters] = useChapterListDrawer({ provider, bookName }, initialChapters);
   const [data, setData] = useState<Record<number, IChapterContent>>(
     initialChapter ? { [initialChapterNo]: initialChapter } : {}
   );
@@ -69,17 +69,17 @@ function ChapterComponment({
   const loaded = useRef<Record<string, boolean>>({
     [initialChapterNo]: !!initialChapter
   });
-  const { setRecords } = useGoBack();
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('unknown');
 
   const [, setShowOverlay] = useState(false);
   const { fontSize, lineHeight, autoFetchNextChapter } = preferences;
+  const { setRecords } = useGoBack();
 
-  // const _openChapterListDrawer = () =>
-  //   openChapterListDrawer({
-  //     chapterNo: currentChapter,
-  //     onItemClick: chapter => gotoChapter(bookName, chapter.number)
-  //   });
+  const _openChapterListDrawer = () =>
+    openChapterListDrawer({
+      chapterNo: currentChapter,
+      onItemClick: chapter => gotoChapter({ provider, bookName, chapterNo: chapter.no || 1 })
+    });
 
   // const navigateChapter = (factor: 1 | -1) => {
   //   const chapterNo = currentChapter + factor;
@@ -111,6 +111,8 @@ function ChapterComponment({
       scrollerRef.current?.dispatchEvent(new Event('scroll'));
     }
   }, []);
+
+  // useLastVisitChapter(bookID, currentChapter);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -246,8 +248,6 @@ function ChapterComponment({
     lastVisitStorage.set(bookName, currentChapter);
   }, [currentChapter, bookName]);
 
-  // useLastVisitChapter(bookID, currentChapter);
-
   // disable scroll resotration for page refresh
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -260,7 +260,7 @@ function ChapterComponment({
   }, []);
 
   if (bookName) {
-    const { name: chapterName = '' } = data[currentChapter] || {};
+    const { name: chapterName } = data[currentChapter] || chapters[currentChapter - 1] || {};
     const prefix = `第${currentChapter}章`;
     const title = `${prefix} ${chapterName}`;
     const content = chapterNums.map(chapterNo => (
@@ -298,11 +298,7 @@ function ChapterComponment({
     return (
       <div className={[classes['container'], classes[scrollDirection]].join(' ').trim()}>
         {/* <FixedChapterName title={title} /> */}
-        <ChapterHeader
-          title={title}
-          openPreferences={openPreferences}
-          // openChapterListDrawer={_openChapterListDrawer}
-        />
+        <ChapterHeader title={title} openPreferences={openPreferences} openChapterListDrawer={_openChapterListDrawer} />
         {/* <ChapterOverlay
           isOpen={showOverlay}
           bookName={bookName}

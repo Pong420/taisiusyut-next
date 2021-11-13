@@ -1,0 +1,66 @@
+@import '~styles/helpers';
+
+.header {
+  @include dimen(100%, $header-height);
+  @include flex(center, space-between);
+  @include padding-x(15px);
+  box-shadow: 0 5px 10px -5px var(--shadow-color);
+  flex: 0 0 auto;
+
+  .header-title {
+    font-size: 16px;
+    margin-left: 0.5em;
+  }
+}
+
+.list-content {
+  @include dimen(320px, 100%);
+  max-width: calc(100vw - 70px);
+  overflow: hidden;
+
+  :global(.ReactVirtualized__List) {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+.list-item {
+  @include flex(center);
+  @include padding-x(10px);
+  cursor: pointer;
+  font-size: 15px;
+
+  &:hover {
+    background-color: var(--item-hover-color);
+  }
+
+  &.active {
+    background-color: var(--item-active-color);
+  }
+}
+
+.chapter-number {
+  font-size: 0.85em;
+  margin-right: 10px;
+  min-width: 50px;
+  text-align: center;
+
+  &:empty {
+    &:before {
+      @include sq-dimen(20px);
+      content: '';
+      display: block;
+      background-color: rgba($gray3, 0.2);
+      margin: auto;
+    }
+  }
+}
+
+.chapter-name {
+  @include text-overflow-ellipsis();
+
+  &:empty {
+    @include dimen(70%, 20px);
+    display: block;
+    background-color: rgba($gray3, 0.2);
+  }
+}
