@@ -9,6 +9,14 @@
 .content {
   @include sq-dimen(100%);
   @include flex(center, center);
+}
+
+.title {
   font-family: 'ink-painting';
   font-size: 60px;
+}
+
+.body {
+  @include sq-dimen(100%);
+  @include flex(center, center, column);
 }

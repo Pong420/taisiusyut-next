@@ -3,6 +3,7 @@
 const withTM = require('next-transpile-modules')(['@taisiusyut-next/server']);
 const { getDependencies } = require('./scripts/getDependencies');
 const { ignoreCssUrlInlineSvg } = require('./scripts/ignoreCssUrlInlineSvg');
+const { repository } = require('../../package.json');
 
 const { serverDeps } = getDependencies();
 
@@ -30,6 +31,11 @@ const config = {
 
   api: {
     bodyParser: false
+  },
+
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    repositoryUrl: repository.url
   }
 };
 

@@ -9,9 +9,11 @@ import {
   ListViewOverlay
 } from '@/components/ListViewOverlay';
 import { openPreferences, PreferencesOverlayIcon, PreferencesOverlayTitle } from '@/components/PreferencesOverlay';
+import { Github } from '@/components/Icon/Github';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useAuth } from '@/hooks/useAuth';
 import { usePreferences } from '@/hooks/usePreferences';
+import { repositoryUrl } from '@/utils/repo';
 import { withAuthRequired } from './withAuthRequired';
 
 interface MainMenuDialogProps extends ListViewDialogProps {}
@@ -70,6 +72,12 @@ export function MainMenuOverlay(props: MainMenuDialogProps) {
       >
         搜索書籍
       </ListItem>
+
+      {repositoryUrl && (
+        <ListItem icon={<Github />} rightElement={chevron} onClick={() => window.open(repositoryUrl)}>
+          Github
+        </ListItem>
+      )}
 
       <ListSpacer />
 

@@ -7,6 +7,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taisiusyut/taisiusyut-next"
+  },
   "scripts": {
     "start": "yarn web start",
     "dev": "lerna run dev --stream --parallel",
