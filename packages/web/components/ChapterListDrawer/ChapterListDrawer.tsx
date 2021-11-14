@@ -64,7 +64,6 @@ export function useChapterListDrawer({ provider, bookName }: IGetChapters, initi
         } catch (error) {
           Toaster.apiError.bind('Get chapters failure', error as string);
           drawer.current?.update({ chapters: [], loading: false });
-          throw error;
         }
       };
 
