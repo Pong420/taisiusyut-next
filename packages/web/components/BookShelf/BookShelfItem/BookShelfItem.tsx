@@ -14,8 +14,8 @@ const bookModelWidth = 55;
 
 export function BookShelfItem({ book: shelf }: Props) {
   const { query } = useRouter();
-  const { book } = shelf;
-  const latestChapter = book?.latestChapter;
+  const { book, lastVistChapter } = shelf;
+  const { latestChapter } = book || {};
 
   const className = classes['item'];
 
@@ -38,11 +38,13 @@ export function BookShelfItem({ book: shelf }: Props) {
   );
 
   if (book) {
+    const {} = {};
     const basePath = `/book/${book.provider}/${book.name}`;
+    const href = typeof lastVistChapter === 'number' ? `${basePath}/${lastVistChapter}` : basePath;
     const active = !!book.name && query.provider === book.provider && query.bookName === book.name;
     return (
       <div className={[className, active ? classes['active'] : ''].join(' ').trim()}>
-        <Link href={basePath} prefetch={false}>
+        <Link href={href} prefetch={false}>
           {/* Should not use <a /> since it have conflict with context menu in In iPhone safari */}
           {content(active)}
         </Link>
@@ -50,13 +52,7 @@ export function BookShelfItem({ book: shelf }: Props) {
     );
   }
 
-  // if (!book.id) {
-  //   return (
-  //     <div className={className}>
-  //       <BookDeletedNotice id={id} onSuccess={actions.delete} />
-  //     </div>
-  //   );
-  // }
+  // TODO: book removed
 
   return <div className={className}>{content(false)}</div>;
 }

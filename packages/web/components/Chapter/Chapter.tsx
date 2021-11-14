@@ -10,6 +10,7 @@ import { useChapterListDrawer } from '@/components/ChapterListDrawer';
 import { Preferences, usePreferences } from '@/hooks/usePreferences';
 import { useGoBack } from '@/hooks/useGoBack';
 import { lastVisitStorage } from '@/utils/storage';
+import { useLastVisitChapter } from '@/hooks/useBookShelf';
 import { ChapterHeader } from './ChapterHeader';
 import { ChapterContent } from './ChapterContent';
 import classes from './Chapter.module.scss';
@@ -25,7 +26,7 @@ export interface ChapterData extends ChapterParams {
   chapters: IChapter[];
 }
 
-export interface ChapterProps extends Omit<ChapterData, 'bookID'> {
+export interface ChapterProps extends ChapterData {
   openPreferences: () => void;
   preferences: Preferences;
 }
@@ -110,7 +111,7 @@ function ChapterComponment({
     }
   }, []);
 
-  // useLastVisitChapter(bookID, currentChapter);
+  useLastVisitChapter({ provider, name: bookName }, currentChapter);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
