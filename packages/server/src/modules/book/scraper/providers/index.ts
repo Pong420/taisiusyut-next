@@ -6,21 +6,32 @@ export type ScraperName = keyof typeof scrapers;
 
 const memoryCache = cacheManager.caching({ store: 'memory', ttl: 10 * 60 /*seconds*/ });
 
-function withCache<T extends Scraper>(scraper: T) {
-  const cacheKey = (...args: string[]) => [scraper.name].concat(args).join('_');
+function enhanceScraper<T extends Scraper>(scraper: T) {
+  function enhancer<F extends (...args: any[]) => Promise<R>, R>(fn: F) {
+    let retry = 0;
+    return async function run(...args: Parameters<F>): Promise<R> {
+      try {
+        const key = [scraper.name].concat(args as string[]).join('_');
+        return await memoryCache.wrap(key, () => fn(...args));
+      } catch (error) {
+        if (retry >= 10) throw error;
+        retry += 1;
+        return await run(...args);
+      }
+    };
+  }
 
   const getBook = scraper.getBook.bind(scraper);
-  scraper.getBook = (bookID: string) => memoryCache.wrap(cacheKey(bookID), () => getBook(bookID));
+  scraper.getBook = enhancer(getBook);
 
   const getChapters = scraper.getChapters.bind(scraper);
-  scraper.getChapters = (bookID: string) => memoryCache.wrap(cacheKey(bookID), () => getChapters(bookID));
+  scraper.getChapters = enhancer(getChapters);
 
   const getChapterContent = scraper.getChapterContent.bind(scraper);
-  scraper.getChapterContent = (bookID: string, chapterID: string) =>
-    memoryCache.wrap(cacheKey(bookID, chapterID), () => getChapterContent(bookID, chapterID));
+  scraper.getChapterContent = enhancer(getChapterContent);
 
   const searchBooks = scraper.searchBooks.bind(scraper);
-  scraper.searchBooks = (query: string) => memoryCache.wrap(cacheKey(query), () => searchBooks(query));
+  scraper.searchBooks = enhancer(searchBooks);
 }
 
 export const scrapers: Record<string, Scraper> = {
@@ -28,7 +39,7 @@ export const scrapers: Record<string, Scraper> = {
 };
 
 for (const key in scrapers) {
-  withCache(scrapers[key]);
+  enhanceScraper(scrapers[key]);
 }
 
 const DEFAULT_SCRAPER = bigquge;
