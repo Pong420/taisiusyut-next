@@ -28,8 +28,8 @@ export abstract class Scraper {
     });
   }
 
-  abstract getBook(id: string): Promise<Omit<IBookDetails, 'id'>>;
-  abstract getChapters(id: string): Promise<IChapter[]>;
+  abstract getBook(bookID: string): Promise<Omit<IBookDetails, 'id'>>;
+  abstract getChapters(bookID: string): Promise<IChapter[]>;
   abstract getChapterContent(bookID: string, chapterID: string): Promise<IChapterContent>;
-  abstract searchBooks(name: string): Promise<ISearchResult[]>;
+  abstract searchBooks(query: string): Promise<ISearchResult[]>;
 }

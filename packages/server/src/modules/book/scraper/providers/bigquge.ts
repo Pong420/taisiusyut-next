@@ -7,11 +7,12 @@ import { Scraper } from '../scraper';
 import { trimChapterName, trimChapterContent } from '../utils';
 
 export const name = '筆趣閣';
+const baseURL = 'https://www.b520.cc/';
 
 @Injectable()
 export class BiqugeScraper extends Scraper {
   constructor() {
-    super(name, { baseURL: 'https://www.biquge5200.cc/' });
+    super(name, { baseURL });
   }
 
   protected _getChapters($: CheerioAPI) {
@@ -38,7 +39,11 @@ export class BiqugeScraper extends Scraper {
   }
 
   async getBook(bookID: string) {
-    const { data: $ } = await this.http.get('/' + bookID);
+    const { data: $ } = await this.http.get('/' + bookID, {
+      headers: {
+        Referer: `${baseURL}/${bookID}/`
+      }
+    });
     const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
     const name = $('#info h1').text();
     const author = $('#info p:nth-child(2)').text().split('：')[1];
@@ -68,7 +73,11 @@ export class BiqugeScraper extends Scraper {
   }
 
   async getChapterContent(bookID: string, chapterID: string) {
-    const { data: $ } = await this.http.get(`/${bookID}/${chapterID}.html`);
+    const { data: $ } = await this.http.get(`/${bookID}/${chapterID}.html`, {
+      headers: {
+        Referer: `${baseURL}/${bookID}/`
+      }
+    });
 
     const [prevChapter, , nextChapter] = $('.bottem1 a')
       .toArray()
@@ -100,6 +109,9 @@ export class BiqugeScraper extends Scraper {
     const { data: $ } = await this.http.get('/modules/article/search.php', {
       params: {
         searchkey: chineseConv.sify(name)
+      },
+      headers: {
+        Referer: baseURL
       }
     });
 
