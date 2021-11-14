@@ -25,7 +25,7 @@ export class BookShelfController {
   @Get('/')
   @UseGuards(AuthGuard('jwt'))
   async shelf(@Req() req: Request) {
-    return this.bookShelfService.find({ user: req.user?.id }, {}, { populate: 'book' });
+    return this.bookShelfService.find({ user: req.user?.id }, {}, { populate: 'book', sort: { updatedAt: -1 } });
   }
 
   @Post('/')
@@ -53,17 +53,6 @@ export class BookShelfController {
     } catch (error) {
       throw new InternalServerErrorException();
     }
-
-    // try {
-    //   const shelf = await this.bookShelfService.findOne({ _id: req.params.id }, { populate: 'book' });
-    //   if (shelf) {
-    //     await this.bookShelfService.delete({ _id: req.params.id });
-    //     return shelf;
-    //   }
-    //   throw new NotFoundException();
-    // } catch (error) {
-    //   throw new InternalServerErrorException();
-    // }
   }
 
   @Patch('/:id')
