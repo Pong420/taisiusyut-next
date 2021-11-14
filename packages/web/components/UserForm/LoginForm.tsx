@@ -1,5 +1,5 @@
 import React from 'react';
-import { createUserForm, UserFormProps } from './UserForm';
+import { createUserForm, userValidators, UserFormProps } from './UserForm';
 
 interface Props extends UserFormProps {
   head?: React.ReactNode;
@@ -11,8 +11,8 @@ export function LoginForm({ head, children, ...props }: Props) {
   return (
     <Form {...props}>
       {head}
-      <Username />
-      <Password />
+      <Username validators={[userValidators.username.required]} />
+      <Password validators={[userValidators.password.required]} />
       {children}
     </Form>
   );

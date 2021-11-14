@@ -58,13 +58,13 @@ export const Toaster = {
       message: renderMessage('Error', options.message)
     });
   },
-  apiError(prefix = '', error: ApiError | string) {
+  apiError(prefix = '', error: ApiError | string | unknown) {
     toasterSubject.next({
       ...defaultOptions,
       className: 'api-error-toaster',
       icon: 'error',
       intent: Intent.DANGER,
-      message: renderMessage(prefix || 'Error', typeof error === 'string' ? error : getErrorMessage(error))
+      message: renderMessage(prefix || 'Error', typeof error === 'string' ? error : getErrorMessage(error as any))
     });
   },
   info(options: Partial<IToastOptions>) {

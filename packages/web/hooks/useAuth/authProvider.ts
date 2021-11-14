@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { defer, fromEvent, Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { ILogin, IRegister, IAuthenticated } from '@/typings';
+import { ILogin, IRegister, IAuthenticated, IUpdateProfile } from '@/typings';
 import { clearJwtToken, register, getJwtToken } from '@/service';
 import { Toaster } from '@/utils/toaster';
 import { lastVisitStorage } from '@/utils/storage';
 import { AuthState, LogoutOptions, authReducer, initialState } from './authReducer';
 
 export type AuthActions = {
-  logout: (options?: LogoutOptions) => void;
   authenticate: typeof authenticate$;
+  logout: (options?: LogoutOptions) => void;
+  updateProfile: (payload: IUpdateProfile) => void;
 };
 
 export const StateContext = React.createContext<AuthState | undefined>(undefined);
@@ -54,6 +55,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
 
   const authActions = React.useMemo<AuthActions>(() => {
     return {
+      updateProfile: payload => dispatch({ type: 'PROFILE_UPDATE', payload }),
       logout: async options => {
         try {
           // TODO:

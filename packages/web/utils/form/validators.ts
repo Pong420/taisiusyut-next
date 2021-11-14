@@ -1,3 +1,21 @@
+import {
+  USERNAME_MIN_LENGTH,
+  USERNAME_MIN_LENGTH_MESSAGE,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MAX_LENGTH_MESSAGE,
+  USERNAME_REGEX,
+  USERNAME_REGEX_MESSAGE,
+  USERNAME_BLACKLIST_REGEX,
+  USERNAME_BLACKLIST_REGEX_MESSAGE,
+  PASSWORD_EUQAL_TO_USERNAME,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH_MESSAGE,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH_MESSAGE,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_MESSAGE
+} from '@taisiusyut-next/server/dist/constants';
+
 export type Validator = (rule: any, value: any) => Promise<void>;
 
 export const compose = (validators: Array<Validator | null>): Validator => {
@@ -89,3 +107,23 @@ export const regex =
   };
 
 export const emailFormat = (msg = 'Plase input a valid email format'): Validator => regex(/^\S+@\S+\.\S+$/, msg);
+
+export const username = {
+  required: required('Please input username'),
+  format: compose([
+    minLength(USERNAME_MIN_LENGTH, USERNAME_MIN_LENGTH_MESSAGE),
+    maxLength(USERNAME_MAX_LENGTH, USERNAME_MAX_LENGTH_MESSAGE),
+    regex(USERNAME_REGEX, USERNAME_REGEX_MESSAGE),
+    regex(USERNAME_BLACKLIST_REGEX, USERNAME_BLACKLIST_REGEX_MESSAGE)
+  ])
+};
+
+export const password = {
+  required: required('Please input password'),
+  format: compose([
+    minLength(PASSWORD_MIN_LENGTH, PASSWORD_MIN_LENGTH_MESSAGE),
+    maxLength(PASSWORD_MAX_LENGTH, PASSWORD_MAX_LENGTH_MESSAGE),
+    regex(PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE)
+  ]),
+  equalToUsername: (username: string) => shouldNotBeEqual(username, PASSWORD_EUQAL_TO_USERNAME)
+};

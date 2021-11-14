@@ -1,5 +1,5 @@
 import React from 'react';
-import { createUserForm, UserFormProps } from './UserForm';
+import { createUserForm, userValidators, UserFormProps } from './UserForm';
 
 interface Props extends UserFormProps {
   head?: React.ReactNode;
@@ -14,9 +14,17 @@ export function RegistrationForm({ head, children, ...props }: Props) {
 
       <Email />
 
-      <Username />
+      <Username validators={[userValidators.username.required, userValidators.username.format]} />
 
-      <Password autoComplete="new-password" deps={['username']} />
+      <Password
+        autoComplete="new-password"
+        deps={['username']}
+        validators={({ username }) => [
+          userValidators.password.required,
+          userValidators.password.format,
+          userValidators.password.equalToUsername(username)
+        ]}
+      />
 
       <ConfirmPassword autoComplete="new-password" />
 

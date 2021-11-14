@@ -6,3 +6,5 @@ export const login = (params: ILogin) => api.post<IAuthenticated>('/auth/login',
 export const register = (params: IRegister) => api.post<IAuthenticated>('/auth/register', params);
 
 export const refreshToken = () => api.post<IAuthenticated>('/auth/refresh-token');
+
+export const logout = () => api.post<{ message: 'success' }>('/auth/logout');

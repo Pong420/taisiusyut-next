@@ -9,6 +9,7 @@ import {
   ListViewOverlay
 } from '@/components/ListViewOverlay';
 import { openPreferences, PreferencesOverlayIcon, PreferencesOverlayTitle } from '@/components/PreferencesOverlay';
+import { openProfileOverlay, ProfileOverlayIcon, ProfileOverlayTitle } from '@/components/ProfileOverlay';
 import { Github } from '@/components/Icon/Github';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useAuth } from '@/hooks/useAuth';
@@ -30,7 +31,7 @@ export const MainMenuOverlayIcon = 'menu';
 export const MainMenuOverlayTitle = '主選單';
 
 export function MainMenuOverlay(props: MainMenuDialogProps) {
-  const [auth] = useAuth();
+  const [auth, authActions] = useAuth();
   const [preferences, preferncesActions] = usePreferences();
 
   return (
@@ -38,15 +39,16 @@ export function MainMenuOverlay(props: MainMenuDialogProps) {
       <ListSpacer />
 
       <AuthrizedListItem
-        icon="user"
+        icon={ProfileOverlayIcon}
         rightElement={
           <div>
-            <span style={{ marginRight: 5 }}>{auth.user?.username || '登入 / 註冊'}</span>
+            <span style={{ marginRight: 5 }}>{auth.user?.nickname || '登入 / 註冊'}</span>
             {chevron}
           </div>
         }
+        onClick={() => openProfileOverlay({ auth, actions: authActions })}
       >
-        帳號
+        {ProfileOverlayTitle}
       </AuthrizedListItem>
 
       <ListItem
