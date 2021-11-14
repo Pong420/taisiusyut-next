@@ -59,3 +59,7 @@ export interface IBookShelf extends Timestamp {
   book: IBook;
   lastVistChapter?: number;
 }
+
+export interface IUpdateBookShelf {
+  lastVistChapter?: number;
+}
