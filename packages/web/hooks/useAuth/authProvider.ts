@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { defer, fromEvent, Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { ILogin, IRegister, IAuthenticated, IUpdateProfile } from '@/typings';
-import { clearJwtToken, register, getJwtToken } from '@/service';
+import { clearJwtToken, register, getJwtToken, logout } from '@/service';
 import { Toaster } from '@/utils/toaster';
 import { lastVisitStorage } from '@/utils/storage';
 import { AuthState, LogoutOptions, authReducer, initialState } from './authReducer';
@@ -58,8 +58,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
       updateProfile: payload => dispatch({ type: 'PROFILE_UPDATE', payload }),
       logout: async options => {
         try {
-          // TODO:
-          // await logout();
+          await logout();
           if (options?.slient !== true) {
             Toaster.success({ message: 'Logout success' });
           }

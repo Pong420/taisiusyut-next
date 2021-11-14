@@ -82,4 +82,10 @@ export class AuthController {
       return res.status(HttpStatus.BAD_REQUEST).send(new BadRequestException('invalid refresh token'));
     }
   }
+
+  @Post('/logout')
+  @UseGuards(AuthGuard('jwt'))
+  async logout(@Req() req: Request, @Res() res: Response) {
+    await this.authService.logout(req, res);
+  }
 }

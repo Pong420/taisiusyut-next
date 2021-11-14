@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Body, Controller, ForbiddenException, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Patch, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '@/modules/users/users.service';
 import { AuthService } from '@/modules/auth/auth.service';
@@ -31,12 +31,6 @@ export class UsersController {
     const isValid = await this.authService.validateUser(req.user?.username || '', password);
     if (!isValid) throw new ForbiddenException('invalid username or password');
     await this.userService.findOneAndUpdate({ _id: req.user?.id }, { password: newPassword });
-    await this.logout(req, res);
-  }
-
-  @Post('/logout')
-  @UseGuards(AuthGuard('jwt'))
-  async logout(@Req() req: Request, @Res() res: Response) {
     await this.authService.logout(req, res);
   }
 }
