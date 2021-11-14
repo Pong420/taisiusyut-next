@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { ButtonPopover } from '@/components/ButtonPopover';
 import { Header, HeaderProps } from '@/components/Layout/Header';
-import { GoBackButton } from '@/components/GoBackButton';
 import { PreferencesOverlayIcon, PreferencesOverlayTitle } from '@/components/PreferencesOverlay';
 import classes from './Chapter.module.scss';
 
 interface Props extends HeaderProps {
+  goBackButton: ReactElement;
   openPreferences?: () => void;
   openChapterListDrawer?: () => void;
 }
 
-export function ChapterHeader({ openPreferences, openChapterListDrawer, ...props }: Props) {
+export function ChapterHeader({ goBackButton, openPreferences, openChapterListDrawer, ...props }: Props) {
   return (
     <Header
       {...props}
       className={classes['header']}
-      left={<GoBackButton targetPath={['/', `/book/:provider/:bookName`]} />}
+      left={goBackButton}
       right={[
         <ButtonPopover
           key="0"

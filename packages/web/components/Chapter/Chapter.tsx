@@ -7,6 +7,7 @@ import { IChapter, IChapterContent, IGetChapterContent } from '@/typings';
 import { Meta } from '@/components/Meta';
 import { openPreferences } from '@/components/PreferencesOverlay';
 import { useChapterListDrawer } from '@/components/ChapterListDrawer';
+import { GoBackButton } from '@/components/GoBackButton';
 import { Preferences, usePreferences } from '@/hooks/usePreferences';
 import { useGoBack } from '@/hooks/useGoBack';
 import { lastVisitStorage } from '@/utils/storage';
@@ -95,6 +96,8 @@ function ChapterComponment({
   //   }
   //   return gotoChapter({ provider, bookName, chapterNo });
   // };
+
+  const goBackButton = <GoBackButton targetPath={['/', `/search`, `/book/${provider}/${bookName}`]} />;
 
   const handleChapterLoaded = useCallback(({ chapterNo, chapter }: { chapterNo: number; chapter: IChapterContent }) => {
     hasNext.current = !!chapter.nextChapter;
@@ -298,7 +301,12 @@ function ChapterComponment({
       <div className={[classes['container'], classes[scrollDirection]].join(' ').trim()}>
         <Meta title={`${bookName} | 第${currentChapter}章 | 睇小說`} />
         {/* <FixedChapterName title={title} /> */}
-        <ChapterHeader title={title} openPreferences={openPreferences} openChapterListDrawer={_openChapterListDrawer} />
+        <ChapterHeader
+          title={title}
+          goBackButton={goBackButton}
+          openPreferences={openPreferences}
+          openChapterListDrawer={_openChapterListDrawer}
+        />
         {/* <ChapterOverlay
           isOpen={showOverlay}
           bookName={bookName}
