@@ -9,6 +9,7 @@ export interface IProfile extends CreatedAt {
   email: string;
   username: string;
   nickname: string;
+  guest?: boolean;
 }
 
 export interface ICreateUser {

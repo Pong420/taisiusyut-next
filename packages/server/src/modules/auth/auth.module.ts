@@ -6,6 +6,7 @@ import { UsersModule } from '@/modules/users/users.module';
 import { ConfigModule, ConfigService } from '@/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { GuestController } from './guest.controller';
 import { RefreshTokenService } from './refresh-token.service';
 import { JwtStrategy, LocalStrategy } from './strategy';
 import { RefreshToken, RefreshTokenSchema } from './schemas/refreshToken.schema';
@@ -35,7 +36,7 @@ import { RefreshToken, RefreshTokenSchema } from './schemas/refreshToken.schema'
     })
   ],
   exports: [AuthService, RefreshTokenService],
-  providers: [AuthService, RefreshTokenService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController]
+  providers: [AuthService, RefreshTokenService, AuthController, LocalStrategy, JwtStrategy],
+  controllers: [AuthController, GuestController]
 })
 export class AuthModule {}

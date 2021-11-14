@@ -38,6 +38,9 @@ export class User implements IUser, Timestamp {
   })
   nickname: string;
 
+  @Prop({ type: Boolean })
+  guest?: boolean;
+
   @Transform(({ value }) => value && Number(value))
   createdAt: number;
 
