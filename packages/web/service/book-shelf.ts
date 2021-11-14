@@ -1,8 +1,12 @@
-import { IBook, IBookPayload } from '@/typings';
+import { IBookPayload, IBookShelf, IUpdateBookShelf } from '@/typings';
 import { api } from './api';
 
-export const getBookShelf = () => api.get<IBook[]>('/shelf');
+export const getBookShelf = () => api.get<IBookShelf[]>('/shelf');
 
-export const addBookToShelf = (payload: IBookPayload) => api.post<IBook>('/shelf', payload);
+export const addBookToShelf = (payload: IBookPayload) => api.post<IBookShelf>('/shelf', payload);
 
-export const removeBookFromShelf = (id: string) => api.delete<IBook>(`/shelf/${id}`);
+export const removeBookFromShelf = (id: string) => api.delete<void>(`/shelf/${id}`);
+
+export const updateBookShelf = (id: string, payload: IUpdateBookShelf) => api.patch(`/shelf/${id}`, payload);
+
+export const lastVisit = (id: string, lastVistChapter: number) => updateBookShelf(id, { lastVistChapter });

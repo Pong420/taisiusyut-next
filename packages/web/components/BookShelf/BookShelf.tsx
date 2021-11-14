@@ -19,7 +19,7 @@ export function BookShelf() {
       <div className={classes['content']}>
         <div className={classes['border']}></div>
         {shelf.list.length
-          ? shelf.list.map(book => <BookShelfItem key={book.id} book={book} />)
+          ? shelf.list.map(book => <BookShelfItem key={book.uid} book={book} />)
           : loginStatus === 'unknown'
           ? null
           : null}

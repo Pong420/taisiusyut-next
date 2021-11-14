@@ -1,43 +1,53 @@
 import { useMemo } from 'react';
 import { useRxAsync } from '@/hooks/useRxAsync';
-import { IBook, IBookPayload } from '@/typings';
+import { IBookShelf } from '@/typings';
 import { addBookToShelf, removeBookFromShelf } from '@/service';
 import { Toaster } from '@/utils/toaster';
 import { useBookShelf } from './useBookShelf';
+import { BookShelfUID, bookShelfUid, BookShelf } from './bookShelfProvider';
 
-type Action = {
-  type: 'add' | 'remove';
-  payload: IBook;
+type AddBook = {
+  type: 'add';
+  payload: IBookShelf;
 };
 
-export function useBookInShelfToggle({ bookID, provider }: IBookPayload) {
+type RemoveBook = {
+  type: 'remove';
+  payload: string;
+};
+
+export function useBookInShelfToggle({ bookID, ...payload }: BookShelfUID & { bookID: string }) {
   const [state, actions] = useBookShelf();
-  const book = state.list.find(b => b.book !== undefined && b.book.bookID === bookID && b.book.provider === provider);
-  const { id } = book || {};
+  const uid = bookShelfUid(payload);
+  const shelf: BookShelf | null = state.byIds[uid] || null;
+  const { provider } = payload;
 
   const { request, onSuccess, onFailure } = useMemo(() => {
     return {
-      onSuccess: (action: Action | null) => {
+      onSuccess: (action: AddBook | RemoveBook) => {
         if (!action) return;
         if (action.type === 'add') {
-          actions.insert(action.payload, 0);
+          const uid = bookShelfUid(action.payload.book);
+          actions.insert({ uid, ...action.payload }, 0);
         } else {
-          actions.delete({ id: action.payload.id });
+          actions.delete({ uid: action.payload });
         }
       },
       onFailure: (error: any) => {
         Toaster.apiError(`Error`, error);
       },
-      request: async (add: boolean) => {
-        const [type, payload] = await Promise.all(
-          add
-            ? ['add' as const, addBookToShelf({ bookID, provider })]
-            : ['remove' as const, id ? removeBookFromShelf(id) : Promise.resolve(null)]
-        );
-        return { type, payload };
+      request: async (shelf: BookShelf | null) => {
+        if (shelf) {
+          if (shelf.id) {
+            await removeBookFromShelf(shelf.id);
+          }
+          return { type: 'remove', payload: uid };
+        }
+        const book = await addBookToShelf({ bookID, provider });
+        return { type: 'add', payload: book };
       }
     };
-  }, [id, bookID, provider, actions]);
+  }, [uid, bookID, provider, actions]);
 
   const [{ loading }, { fetch }] = useRxAsync(request, {
     defer: true,
@@ -45,5 +55,5 @@ export function useBookInShelfToggle({ bookID, provider }: IBookPayload) {
     onFailure
   });
 
-  return [!!book, loading, fetch] as const;
+  return [shelf, loading, fetch] as const;
 }
