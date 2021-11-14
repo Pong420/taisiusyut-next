@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Body, Controller, ForbiddenException, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '@/modules/users/users.service';
 import { AuthService } from '@/modules/auth/auth.service';
@@ -8,6 +8,12 @@ import { ModifyPasswordDto, UpdateProfileDto } from '@/modules/users/dto';
 @Controller()
 export class UsersController {
   constructor(private userService: UsersService, private authService: AuthService) {}
+
+  @Get('/profile')
+  @UseGuards(AuthGuard('jwt'))
+  async Profile(@Req() req: Request) {
+    return this.userService.findOne({ _id: req.user?.id });
+  }
 
   @Patch('/profile')
   @UseGuards(AuthGuard('jwt'))
