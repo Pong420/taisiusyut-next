@@ -2,14 +2,14 @@ import { nanoid } from 'nanoid';
 import { Request, Response } from 'express';
 import {
   Body,
-  Controller,
   Post,
   Req,
-  UseGuards,
-  InternalServerErrorException,
   Res,
+  Controller,
+  UseGuards,
   HttpStatus,
-  BadRequestException
+  BadRequestException,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from '@/modules/users/dto';

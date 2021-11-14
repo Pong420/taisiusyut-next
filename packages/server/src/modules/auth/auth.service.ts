@@ -1,16 +1,19 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@/config';
 import { UsersService } from '@/modules/users/users.service';
+import { RefreshTokenService } from './refresh-token.service';
 import { IJWTSignPayload, IJWTSignResult } from '@/typings';
 import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private usersService: UsersService,
+    private configService: ConfigService,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
   async validateUser(username: string, pass: string): Promise<IJWTSignPayload | undefined> {
@@ -41,5 +44,16 @@ export class AuthService {
 
   async login(payload: IJWTSignPayload) {
     return this.signJwt(payload);
+  }
+
+  async logout(req: Request, res: Response) {
+    await this.refreshTokenService.deleteToken(req);
+    return this.refreshTokenService
+      .setCookie(res, '', {
+        httpOnly: true,
+        expires: new Date(0)
+      })
+      .status(HttpStatus.OK)
+      .send({ message: 'success' });
   }
 }

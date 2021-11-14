@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { User, UserSchema } from './schemas/user.schema';
 import { UsersService } from './users.service';
+import { UsersController } from './users.controller';
 
 @Module({
   imports: [
+    forwardRef(() => AuthModule),
     MongooseModule.forFeatureAsync([
       {
         name: User.name,
@@ -15,6 +18,7 @@ import { UsersService } from './users.service';
     ])
   ],
   exports: [UsersService],
-  providers: [UsersService]
+  providers: [UsersService],
+  controllers: [UsersController]
 })
 export class UsersModule {}

@@ -13,3 +13,13 @@ export interface ICreateUser {
   username: string;
   password: string;
 }
+
+export interface IUpdateProfile {
+  email?: string;
+  nickname?: string;
+}
+
+export interface IModifyPassword {
+  password: string;
+  newPassword: string;
+}
