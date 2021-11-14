@@ -69,8 +69,8 @@ export class AuthController {
         const user = await this.userService.findOne({ _id: refreshToken.user });
 
         if (user) {
-          const { id, username, nickname } = user.toJSON();
-          const signPayload: IJWTSignPayload = { id, username, nickname };
+          const { id, username, nickname, guest } = user.toJSON();
+          const signPayload: IJWTSignPayload = { id, username, nickname, guest };
           const signResult = this.authService.signJwt(signPayload);
           const response: IAuthenticated = {
             ...signResult

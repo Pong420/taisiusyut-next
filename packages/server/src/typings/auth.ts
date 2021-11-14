@@ -1,11 +1,7 @@
 import { Timestamp } from './common';
-import { ICreateUser } from './user';
+import { ICreateUser, IProfile } from './user';
 
-export interface IJWTSignPayload {
-  id: string;
-  username: string;
-  nickname: string;
-}
+export interface IJWTSignPayload extends Omit<IProfile, 'email' | keyof Timestamp> {}
 
 export interface IJWTSignResult {
   user: IJWTSignPayload;
