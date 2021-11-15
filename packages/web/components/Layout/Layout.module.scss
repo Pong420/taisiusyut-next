@@ -33,7 +33,7 @@
   font-family: #{$base-font-family};
   overflow: hidden;
 
-  @media (min-width: $break-point+1) {
+  @media (min-width: #{$break-point + 1}) {
     font-size: $pt-font-size;
 
     html:not([data-display='single']) & {
@@ -73,7 +73,13 @@
 .left-panel {
   @include relative(); // for shadow-border
   @include shadow-border();
+  @include flex($flex-direction: column);
   flex: 1 0 300px;
+  overflow: auto;
+}
+
+.panel-content {
+  flex: 1 1 auto;
   overflow: auto;
 }
 

@@ -14,6 +14,7 @@ export function ChapterHeader({ goBackButton, openPreferences, openChapterListDr
   return (
     <Header
       {...props}
+      position="right"
       className={classes['header']}
       left={goBackButton}
       right={[

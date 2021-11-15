@@ -15,16 +15,14 @@ export function BookShelf() {
   const { loginStatus } = useAuthState();
 
   return (
-    <div className={classes['shelf']}>
+    <>
       <Header className={classes['header']} title="書架" left={<MainMenuButton minimal icon={MainMenuOverlayIcon} />} />
-      <div className={classes['content']}>
-        <div className={classes['border']}></div>
-        {shelf.list.length ? (
-          shelf.list.map(book => <BookShelfItem key={book.uid} book={book} />)
-        ) : loginStatus === 'unknown' ? null : (
-          <BookShelfEmpty />
-        )}
-      </div>
-    </div>
+      <div className={classes['border']}></div>
+      {shelf.list.length ? (
+        shelf.list.map(book => <BookShelfItem key={book.uid} book={book} />)
+      ) : loginStatus === 'unknown' ? null : (
+        <BookShelfEmpty />
+      )}
+    </>
   );
 }

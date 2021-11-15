@@ -4,7 +4,7 @@ import { SearchPanel } from '@/components/SearchPanel';
 export default function SearchPage() {
   return (
     <div>
-      <Header />
+      <Header position="right" />
     </div>
   );
 }

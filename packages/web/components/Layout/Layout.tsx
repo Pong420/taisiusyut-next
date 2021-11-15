@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { BookShelf } from '@/components/BookShelf';
 import { SearchPanel } from '@/components/SearchPanel';
-import { NoSSR } from '@/components/NoSSR';
+import { headerPortalId } from '@/components/Layout/Header';
 import { useGoBack } from '@/hooks/useGoBack';
 import classes from './Layout.module.scss';
 
@@ -39,9 +39,17 @@ export function Layout({ children }: LayoutProps) {
     <div className={classes['layout']}>
       <div className={classes['layout-content']}>
         <div className={classes['left-panel']}>
-          <NoSSR>{leftPanel}</NoSSR>
+          <div id={headerPortalId('left')}></div>
+          <div id="left-panel-content" className={classes['panel-content']}>
+            {leftPanel}
+          </div>
         </div>
-        <div className={classes['right-panel']}>{children}</div>
+        <div className={classes['right-panel']}>
+          <div id={headerPortalId('right')}></div>
+          <div id="right-panel-content" className={classes['panel-content']}>
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );

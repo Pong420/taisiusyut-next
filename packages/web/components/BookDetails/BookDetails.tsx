@@ -23,6 +23,7 @@ export function BookDetails({ book }: BookDetailsProps) {
       <Meta title={`${book.name} | 睇小說`} />
       <Header
         {...headerProps}
+        position="right"
         right={[
           <BookShelfToggle key="0" icon minimal bookID={book.bookID} provider={book.provider} bookName={book.name} />
         ]}

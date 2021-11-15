@@ -12,29 +12,27 @@ const { Form, FormItem } = createForm<{ q: string }>();
 
 export function Home() {
   return (
-    <div className={classes['home']}>
-      <Header />
+    <>
+      <Header position="right" />
+
       <div className={classes['content']}>
-        <div className={classes['body']}>
-          <div className={classes['title']}>Tai siu syut</div>
+        <div className={classes['title']}>Tai siu syut</div>
+        <Form onFinish={query => router.push({ pathname: '/search', query })} className={classes['form']}>
+          <FormItem name="q" noStyle>
+            <Input
+              fill
+              round
+              large
+              placeholder="輸入作者/書籍名稱 ..."
+              leftElement={<Button icon="search" minimal type="submit" />}
+            />
+          </FormItem>
+        </Form>
 
-          <Form onFinish={query => router.push({ pathname: '/search', query })} className={classes['form']}>
-            <FormItem name="q" noStyle>
-              <Input
-                fill
-                round
-                large
-                placeholder="輸入作者/書籍名稱 ..."
-                leftElement={<Button icon="search" minimal type="submit" />}
-              />
-            </FormItem>
-          </Form>
-
-          <a href={repositoryUrl} target="_blank" rel="noreferrer">
-            <Github width="30" height="30" />
-          </a>
-        </div>
+        <a href={repositoryUrl} target="_blank" rel="noreferrer">
+          <Github width="30" height="30" />
+        </a>
       </div>
-    </div>
+    </>
   );
 }

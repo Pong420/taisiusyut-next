@@ -1,6 +1,8 @@
 import React, { ReactNode, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { BlankButton } from '@/components/BlankButton';
 import classes from './Layout.module.scss';
+import { NoSSR } from '../NoSSR';
 
 export interface HeaderProps {
   className?: string;
@@ -8,6 +10,7 @@ export interface HeaderProps {
   left?: ReactNode | ReactNode[];
   right?: ReactNode | ReactNode[];
   children?: ReactNode;
+  position?: 'left' | 'right';
 }
 
 function getLength(payload: unknown) {
@@ -20,7 +23,7 @@ function createSpacer(self: unknown, target: unknown) {
   ));
 }
 
-export function Header({ className = '', title, children, left, right = children }: HeaderProps) {
+export function HeaderComponent({ className = '', title, children, left, right = children }: HeaderProps) {
   const [fillLeft] = useState(createSpacer(left, right));
   const [fillRight] = useState(createSpacer(right, left));
 
@@ -36,5 +39,22 @@ export function Header({ className = '', title, children, left, right = children
         {right}
       </div>
     </div>
+  );
+}
+
+export const headerPortalId = (position: HeaderProps['position']) => {
+  return `${position}-panel-header`;
+};
+
+function HeaderParotal({ position = 'left', ...props }: HeaderProps) {
+  const node = document.getElementById(headerPortalId(position));
+  return node && ReactDOM.createPortal(<HeaderComponent {...props} />, node);
+}
+
+export function Header(props: HeaderProps) {
+  return (
+    <NoSSR>
+      <HeaderParotal {...props} />
+    </NoSSR>
   );
 }
