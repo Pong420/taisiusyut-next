@@ -11,8 +11,10 @@ export interface OverlayHandler<T> {
   destroy: () => void;
 }
 
+export type OpenOverlayProps<T> = Omit<T, keyof OverlayProps> & Partial<OverlayProps>;
+
 export function createOpenOverlay<T extends Partial<OverlayProps>>(OverlayComponent: ComponentType<T>) {
-  return function openOverlay(config = {} as Omit<T, keyof OverlayProps> & Partial<OverlayProps>) {
+  return function openOverlay(config = {} as OpenOverlayProps<T>) {
     const div = document.createElement('div');
     document.body.appendChild(div);
 

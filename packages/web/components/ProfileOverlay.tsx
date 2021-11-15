@@ -13,7 +13,7 @@ import { Logo } from '@/components/Logo';
 import { openModifyPasswordOverlay } from './ModifyPasswordOverlay';
 import { openProfileUpdateOverlay } from './ProfileUpdateOverlay';
 import { AuthState, AuthActions } from '@/hooks/useAuth';
-import { createOpenOverlay, OverlayHandler } from '@/utils/openOverlay';
+import { createOpenOverlay, OverlayHandler, OpenOverlayProps } from '@/utils/openOverlay';
 import { copyToClipboard } from '@/utils/copyToClipboard';
 import { guestConnect } from '@/service';
 import { IProfile } from '@/typings';
@@ -29,7 +29,7 @@ const chevron = <Icon icon="chevron-right" />;
 const { useForm } = createUserForm();
 
 let handler: OverlayHandler<ProfileOverlayProps> | undefined;
-export const openProfileOverlay = (props: ProfileOverlayProps) => {
+export const openProfileOverlay = (props: OpenOverlayProps<ProfileOverlayProps>) => {
   handler = createOpenOverlay(ProfileOverlay)(props);
   return handler;
 };
