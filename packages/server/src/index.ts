@@ -15,8 +15,10 @@ export async function getApp() {
   if (app) return app;
 
   if (!appPromise) {
+    // eslint-disable-next-line
+    console.log('creating nest app');
     appPromise = new Promise<INestApplication>(async resolve => {
-      const appInCreation = await NestFactory.create(AppModule);
+      const appInCreation = await NestFactory.create(AppModule, { logger: ['warn', 'error', 'debug'] });
       appInCreation.setGlobalPrefix('api');
       setup(appInCreation);
       await appInCreation.init();

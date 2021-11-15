@@ -5,7 +5,7 @@ import { setup } from './setup';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: false });
 
   app.setGlobalPrefix('api');
 

@@ -4,7 +4,7 @@ import { name as bigquge, BiqugeScraper } from './bigquge';
 
 export type ScraperName = keyof typeof scrapers;
 
-const memoryCache = cacheManager.caching({ store: 'memory', ttl: 10 * 60 /*seconds*/ });
+const memoryCache = cacheManager.caching({ store: 'memory', ttl: 12 * 60 * 60 /*seconds*/ });
 
 function enhanceScraper<T extends Scraper>(scraper: T) {
   function enhancer<F extends (...args: any[]) => Promise<R>, R>(fn: F) {
@@ -16,6 +16,8 @@ function enhanceScraper<T extends Scraper>(scraper: T) {
       } catch (error) {
         if (retry >= 10) throw error;
         retry += 1;
+        // eslint-disable-next-line
+        console.log('retrying', fn.name, error);
         return await run(...args);
       }
     };
