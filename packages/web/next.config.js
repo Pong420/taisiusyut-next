@@ -1,13 +1,19 @@
 // @ts-check
 
 const withTM = require('next-transpile-modules')(['@taisiusyut-next/server']);
+const withPWA = require('next-pwa');
 const { getDependencies } = require('./scripts/getDependencies');
 const { ignoreCssUrlInlineSvg } = require('./scripts/ignoreCssUrlInlineSvg');
 const { repository } = require('../../package.json');
 
 const { serverDeps } = getDependencies();
 
-/** @type {import('next').NextConfig} */
+/**
+ * @typedef {{ disable?: boolean }} NextPWAConfig
+ * @typedef {import('next').NextConfig & { pwa?: NextPWAConfig }} NextConfig
+ */
+
+/** @type {NextConfig & NextPWAConfig} */
 const config = {
   // for @blueprintjs
   reactStrictMode: false,
@@ -36,7 +42,11 @@ const config = {
   publicRuntimeConfig: {
     // Will be available on both server and client
     repositoryUrl: repository.url
+  },
+
+  pwa: {
+    disable: process.env.NODE_ENV !== 'production'
   }
 };
 
-module.exports = withTM(config);
+module.exports = withPWA(withTM(config));
