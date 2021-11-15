@@ -1,10 +1,16 @@
 import { api } from './api';
-import { ILogin, IAuthenticated, IRegister } from '@/typings';
+import { ILogin, IAuthenticated, IRegister, IProfile } from '@/typings';
 
-export const login = (params: ILogin) => api.post<IAuthenticated>('/auth/login', params);
+export const login = (payload: ILogin) => api.post<IAuthenticated>('/auth/login', payload);
 
-export const register = (params: IRegister) => api.post<IAuthenticated>('/auth/register', params);
+export const register = (payload: IRegister) => api.post<IProfile>('/auth/register', payload);
 
 export const refreshToken = () => api.post<IAuthenticated>('/auth/refresh-token');
 
 export const logout = () => api.post<{ message: 'success' }>('/auth/logout');
+
+export const guestLogin = (uid: string) => api.post<IAuthenticated>('/guest/login', { uid });
+
+export const guestRegister = () => api.post<IProfile>('/guest/register');
+
+export const guestConnect = (payload: IRegister) => api.post<IAuthenticated>('/guest/connect', payload);

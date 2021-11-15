@@ -10,6 +10,7 @@ export interface ConfirmDialogProps extends DialogProps {
   cancelText?: string;
   onConfirm?: () => Promise<unknown>;
   onCancel?: () => unknown | Promise<unknown>;
+  onSuccess?: () => void;
   onClose?: () => void;
   loading?: boolean;
 }
@@ -23,6 +24,7 @@ export function createConfirmDialog<P extends DialogProps>(Component: React.Comp
     onClose,
     onConfirm,
     onCancel,
+    onSuccess = onClose,
     loading: loadingFromProps,
     confirmText = '確認',
     cancelText = '取消',
@@ -31,7 +33,7 @@ export function createConfirmDialog<P extends DialogProps>(Component: React.Comp
   }: P & ConfirmDialogProps) {
     const [{ loading }, { fetch }] = useRxAsync(onConfirm || asyncFn, {
       defer: true,
-      onSuccess: onClose
+      onSuccess
     });
     const isLoading = loadingFromProps || loading;
 

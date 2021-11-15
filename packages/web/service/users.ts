@@ -1,7 +1,7 @@
 import { api } from './api';
 import { IModifyPassword, IProfile, IUpdateProfile } from '@/typings';
 
-export const getProfile = () => api.post<IProfile>('/profile');
+export const getProfile = () => api.get<IProfile>('/profile');
 
 export const updateProfile = (payload: IUpdateProfile) => api.patch<IProfile>('/profile', payload);
 

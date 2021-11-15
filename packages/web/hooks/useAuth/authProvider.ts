@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { defer, fromEvent, Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { ILogin, IRegister, IAuthenticated, IUpdateProfile } from '@/typings';
+import { ILogin, IRegister, IAuthenticated, IGuestLogin, IProfile } from '@/typings';
 import { clearJwtToken, register, getJwtToken, logout } from '@/service';
 import { Toaster } from '@/utils/toaster';
 import { lastVisitStorage } from '@/utils/storage';
@@ -10,7 +10,7 @@ import { AuthState, LogoutOptions, authReducer, initialState } from './authReduc
 export type AuthActions = {
   authenticate: typeof authenticate$;
   logout: (options?: LogoutOptions) => void;
-  updateProfile: (payload: IUpdateProfile) => void;
+  updateProfile: (payload: Partial<IProfile>) => void;
 };
 
 export const StateContext = React.createContext<AuthState | undefined>(undefined);
@@ -25,7 +25,7 @@ const shouldRefershToken = () => {
   return false;
 };
 
-function authenticate$(payload?: ILogin | IRegister): Observable<IAuthenticated> {
+function authenticate$(payload?: ILogin | IGuestLogin | IRegister): Observable<IAuthenticated> {
   if (payload && 'email' in payload) {
     return defer(() => register(payload)).pipe(
       switchMap(() => {
@@ -78,6 +78,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
       },
       authenticate: payload => {
         dispatch({ type: 'AUTHENTICATE' });
+
         return authenticate$(payload).pipe(
           tap(auth => {
             try {
