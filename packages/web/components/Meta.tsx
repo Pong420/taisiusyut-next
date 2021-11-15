@@ -9,7 +9,9 @@ interface Props {
   children?: ReactNode;
 }
 
-const ORIGIN = process.env.NEXT_PUBLIC_ORIGIN || '';
+const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+const vercelOrgin = vercelUrl ? `https://${vercelUrl}` : '';
+const Origin = process.env.NEXT_PUBLIC_Origin || vercelOrgin || '';
 
 export function Meta({
   children,
@@ -31,8 +33,8 @@ export function Meta({
       <meta key="og:title" property="og:title" content={title} />
       <meta key="og:description" property="og:description" content={description} />
       <meta key="og:site_name" property="og:site_name" content="睇小說" />
-      <meta key="og:url" property="og:url" content={ORIGIN} />
-      <meta key="og:image" property="og:image" content={`${ORIGIN}/icons/apple-touch-icon.png`} />
+      <meta key="og:url" property="og:url" content={Origin} />
+      <meta key="og:image" property="og:image" content={`${Origin}/icons/apple-touch-icon.png`} />
       {children}
     </Head>
   );
@@ -74,16 +76,16 @@ export function CommonMeta() {
       <link rel="shortcut icon" href="/favicon.ico" />
 
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:url" content={ORIGIN} />
+      <meta name="twitter:url" content={Origin} />
       <meta name="twitter:title" content="睇小說" />
       <meta name="twitter:description" content="睇小說" />
-      <meta name="twitter:image" content={`${ORIGIN}/icons/android-chrome-192x192.png`} />
+      <meta name="twitter:image" content={`${Origin}/icons/android-chrome-192x192.png`} />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="睇小說" />
       <meta property="og:description" content="Best 睇小說 in the world" />
       <meta property="og:site_name" content="睇小說" />
-      <meta property="og:url" content={ORIGIN} />
-      <meta property="og:image" content={`${ORIGIN}/icons/apple-touch-icon.png`} />
+      <meta property="og:url" content={Origin} />
+      <meta property="og:image" content={`${Origin}/icons/apple-touch-icon.png`} />
 
       {/*  apple splash screen images */}
       {/* https://appsco.pe/developer/splash-screens */}
