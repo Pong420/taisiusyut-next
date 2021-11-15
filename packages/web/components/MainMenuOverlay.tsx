@@ -16,12 +16,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { usePreferences } from '@/hooks/usePreferences';
 import { repositoryUrl } from '@/utils/repo';
 import { withAuthRequired } from './withAuthRequired';
+import { ButtonPopover } from './ButtonPopover';
 
 interface MainMenuDialogProps extends ListViewDialogProps {}
-
-interface OnClick {
-  onClick?: (event: React.MouseEvent<any>) => void;
-}
 
 const chevron = <Icon icon="chevron-right" />;
 
@@ -92,14 +89,12 @@ export function MainMenuOverlay(props: MainMenuDialogProps) {
   );
 }
 
-export function withMainMenuOverLay<P extends OnClick>(Component: React.ComponentType<P>) {
-  return function WithMainMenuOverLay(props: P) {
-    const [isOpen, open, close] = useBoolean();
-    return (
-      <>
-        <Component {...props} onClick={open} />
-        <MainMenuOverlay isOpen={isOpen} onClose={close} />
-      </>
-    );
-  };
+export function MainMenuButton() {
+  const [isOpen, open, close] = useBoolean();
+  return (
+    <>
+      <ButtonPopover minimal icon={MainMenuOverlayIcon} content={MainMenuOverlayTitle} onClick={open} />
+      <MainMenuOverlay isOpen={isOpen} onClose={close} />
+    </>
+  );
 }

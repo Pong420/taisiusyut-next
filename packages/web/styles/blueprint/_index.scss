@@ -35,6 +35,10 @@ $pt-dark-divider-black: rgba(255, 255, 255, 0.15);
   .#{$ns}-card.#{$ns}-card {
     background-color: var(--primary-color);
   }
+
+  .#{$ns}-card.#{$ns}-card {
+    box-shadow: 0 0 0 1px hsl(0deg 0% 100% / 15%), 0 0 0 rgb(16 22 26 / 0%), 0 0 0 rgb(16 22 26 / 0%);
+  }
 }
 
 a,

@@ -6,7 +6,9 @@ import { BookShelf } from '@/components/BookShelf';
 import { AuthProvider } from '@/hooks/useAuth';
 import { GoBackProvider } from '@/hooks/useGoBack';
 import { BookShelfProvider } from '@/hooks/useBookShelf';
+import { BreakPointsProvider } from '@/hooks/useBreakPoints';
 import { PreferencesProvider } from '@/hooks/usePreferences';
+import { composeProviders } from '@/utils/composeProviders';
 import '@/styles/globals.scss';
 
 interface ExtendAppProps extends AppProps {
@@ -27,19 +29,23 @@ function AppContent(props: ExtendAppProps) {
   return <Layout leftPanel={<LeftPanel />}>{component}</Layout>;
 }
 
+const Provider = composeProviders(
+  AuthProvider,
+  PreferencesProvider,
+  BookShelfProvider,
+  BreakPointsProvider,
+  GoBackProvider
+);
+
 function App(props: ExtendAppProps) {
   return (
-    <PreferencesProvider>
-      <GoBackProvider>
-        <AuthProvider>
-          <BookShelfProvider>
-            <Meta />
-            <CommonMeta />
-            <AppContent {...props} />
-          </BookShelfProvider>
-        </AuthProvider>
-      </GoBackProvider>
-    </PreferencesProvider>
+    <Provider>
+      <>
+        <Meta />
+        <CommonMeta />
+        <AppContent {...props} />
+      </>
+    </Provider>
   );
 }
 

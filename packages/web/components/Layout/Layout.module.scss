@@ -92,3 +92,44 @@
   flex: 1 1 auto;
   overflow: hidden;
 }
+
+@mixin single-page {
+  .layout {
+    .header {
+      @include fixed(-1px, null, 0);
+    }
+
+    .left-panel {
+      max-width: none;
+      flex: 1 0 100%;
+    }
+
+    .left-panel,
+    .right-panel {
+      box-shadow: none;
+      padding-top: $header-height;
+    }
+  }
+}
+
+:global([data-display='single']) {
+  @include single-page;
+}
+
+@media (max-width: $break-point) {
+  :global(html:not([data-display='single'])) {
+    @include single-page;
+  }
+
+  .bottom-navigation {
+    display: block;
+
+    &:not(:empty) {
+      @include dimen(100%, calc($bottom-navigation-height + env(safe-area-inset-bottom, 0)));
+    }
+
+    > * {
+      @include fixed(null, 0, 0);
+    }
+  }
+}
