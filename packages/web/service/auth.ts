@@ -13,4 +13,4 @@ export const guestLogin = (uid: string) => api.post<IAuthenticated>('/guest/logi
 
 export const guestRegister = () => api.post<IProfile>('/guest/register');
 
-export const guestConnect = (payload: IRegister) => api.post<IAuthenticated>('/guest/connect', payload);
+export const guestConnect = (payload: IRegister) => api.post<IProfile>('/guest/connect', payload);

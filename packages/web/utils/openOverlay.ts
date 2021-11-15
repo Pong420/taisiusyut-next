@@ -6,6 +6,11 @@ interface OverlayProps extends BpOverlayProps {
   children?: ReactNode;
 }
 
+export interface OverlayHandler<T> {
+  update: (newConfig: Partial<T>) => void;
+  destroy: () => void;
+}
+
 export function createOpenOverlay<T extends Partial<OverlayProps>>(OverlayComponent: ComponentType<T>) {
   return function openOverlay(config = {} as Omit<T, keyof OverlayProps> & Partial<OverlayProps>) {
     const div = document.createElement('div');
@@ -53,9 +58,11 @@ export function createOpenOverlay<T extends Partial<OverlayProps>>(OverlayCompon
 
     render(currentConfig);
 
-    return {
+    const handler: OverlayHandler<T> = {
       destroy: close,
       update
     };
+
+    return handler;
   };
 }

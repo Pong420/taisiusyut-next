@@ -13,9 +13,10 @@ import { Logo } from '@/components/Logo';
 import { openModifyPasswordOverlay } from './ModifyPasswordOverlay';
 import { openProfileUpdateOverlay } from './ProfileUpdateOverlay';
 import { AuthState, AuthActions } from '@/hooks/useAuth';
-import { createOpenOverlay } from '@/utils/openOverlay';
+import { createOpenOverlay, OverlayHandler } from '@/utils/openOverlay';
 import { copyToClipboard } from '@/utils/copyToClipboard';
 import { guestConnect } from '@/service';
+import { IProfile } from '@/typings';
 import dayjs from 'dayjs';
 
 export interface ProfileOverlayProps extends ListViewOverlayProps {
@@ -27,7 +28,11 @@ const chevron = <Icon icon="chevron-right" />;
 
 const { useForm } = createUserForm();
 
-export const openProfileOverlay = createOpenOverlay(ProfileOverlay);
+let handler: OverlayHandler<ProfileOverlayProps> | undefined;
+export const openProfileOverlay = (props: ProfileOverlayProps) => {
+  handler = createOpenOverlay(ProfileOverlay)(props);
+  return handler;
+};
 
 export const ProfileOverlayIcon = 'user';
 export const ProfileOverlayTitle = '帳號';
@@ -58,8 +63,8 @@ function RegistrationItem({ actions }: { actions: AuthActions }) {
 
   async function handleSubmit() {
     const payload = await form.validateFields();
-    const auth = await guestConnect(payload);
-    actions.updateProfile({ ...auth.user, guest: undefined });
+    const user = await guestConnect(payload);
+    actions.updateProfile({ ...user, guest: undefined });
   }
 
   function onClick() {
@@ -82,6 +87,14 @@ function RegistrationItem({ actions }: { actions: AuthActions }) {
 }
 
 export function ProfileOverlay({ auth, actions, ...props }: ProfileOverlayProps) {
+  useEffect(() => {
+    const updateProfile = actions.updateProfile;
+    actions.updateProfile = function (user: Partial<IProfile>) {
+      updateProfile(user);
+      auth.user && handler?.update({ auth: { ...auth, user: { ...auth.user, ...user } } });
+    };
+  }, []); // eslint-disable-line
+
   if (auth.loginStatus !== 'loggedIn') {
     return null;
   }
