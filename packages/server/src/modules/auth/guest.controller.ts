@@ -41,6 +41,13 @@ export class GuestController {
   @Post('/connect')
   @UseGuards(AuthGuard('jwt'))
   async connect(@Req() req: Request, @Body() payload: CreateUserDto) {
-    return this.userService.findOneAndUpdate({ _id: req.user?.id }, payload);
+    const user = this.userService.findOneAndUpdate(
+      { _id: req.user?.id, guest: true },
+      { ...payload, nickname: payload.username, $unset: { guest: 1 } },
+      { new: true }
+    );
+
+    if (!user) throw new NotFoundException();
+    return user;
   }
 }
