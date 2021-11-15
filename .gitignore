@@ -2,3 +2,5 @@
 
 **/server/dist
 .vercel
+
+.env.local
