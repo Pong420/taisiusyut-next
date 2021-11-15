@@ -17,12 +17,13 @@ export function BookShelf() {
   return (
     <>
       <Header className={classes['header']} title="書架" left={<MainMenuButton minimal icon={MainMenuOverlayIcon} />} />
-      <div className={classes['border']}></div>
-      {shelf.list.length ? (
-        shelf.list.map(book => <BookShelfItem key={book.uid} book={book} />)
-      ) : loginStatus === 'unknown' ? null : (
-        <BookShelfEmpty />
-      )}
+      <div className={classes['shelf']}>
+        {shelf.list.length ? (
+          shelf.list.map(book => <BookShelfItem key={book.uid} book={book} />)
+        ) : loginStatus === 'unknown' ? null : (
+          <BookShelfEmpty />
+        )}
+      </div>
     </>
   );
 }

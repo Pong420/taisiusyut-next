@@ -1,8 +1,8 @@
 import React, { ReactNode, useState } from 'react';
 import ReactDOM from 'react-dom';
+import dynamic from 'next/dynamic';
 import { BlankButton } from '@/components/BlankButton';
 import classes from './Layout.module.scss';
-import { NoSSR } from '../NoSSR';
 
 export interface HeaderProps {
   className?: string;
@@ -51,10 +51,4 @@ function HeaderParotal({ position = 'left', ...props }: HeaderProps) {
   return node && ReactDOM.createPortal(<HeaderComponent {...props} />, node);
 }
 
-export function Header(props: HeaderProps) {
-  return (
-    <NoSSR>
-      <HeaderParotal {...props} />
-    </NoSSR>
-  );
-}
+export const Header = dynamic(async () => HeaderParotal, { ssr: false });
