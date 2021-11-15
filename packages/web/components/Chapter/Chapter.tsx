@@ -14,6 +14,8 @@ import { lastVisitStorage } from '@/utils/storage';
 import { useLastVisitChapter } from '@/hooks/useBookShelf';
 import { ChapterHeader } from './ChapterHeader';
 import { ChapterContent } from './ChapterContent';
+import { ChapterOverlay } from './ChapterOverlay';
+import { FixedChapterName } from './FixedChapterName';
 import classes from './Chapter.module.scss';
 
 export type ChapterParams = {
@@ -74,25 +76,25 @@ function ChapterComponment({
   });
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('unknown');
 
-  const [, setShowOverlay] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
   const { fontSize, lineHeight, autoFetchNextChapter } = preferences;
   const { setRecords } = useGoBack();
 
-  // const navigateChapter = (factor: 1 | -1) => {
-  //   const chapterNo = currentChapter + factor;
-  //   const idx = currentChapter + factor - 1;
+  const navigateChapter = (factor: 1 | -1) => {
+    const chapterNo = currentChapter + factor;
+    const idx = currentChapter + factor - 1;
 
-  //   if (chapterNo <= 0) return alert(`沒有上一章節`);
-  //   if (factor === 1) {
-  //     // true if not sure has next chapter?
-  //     if (!loaded.current[currentChapter]) {
-  //       return alert(`請刷新頁面或者稍後再試`);
-  //     } else if (!hasNext.current) {
-  //       return alert(`沒有下一章節`);
-  //     }
-  //   }
-  //   return gotoChapter({ provider, bookName, chapterNo });
-  // };
+    if (chapterNo <= 0) return alert(`沒有上一章節`);
+    if (factor === 1) {
+      // true if not sure has next chapter?
+      if (!loaded.current[currentChapter] && !chapters[idx]?.no) {
+        return alert(`請刷新頁面或者稍後再試`);
+      } else if (!hasNext.current) {
+        return alert(`沒有下一章節`);
+      }
+    }
+    return gotoChapter({ provider, bookName, chapterNo });
+  };
 
   const goBackButton = <GoBackButton targetPath={['/', `/search`, `/book/${provider}/${bookName}`]} />;
 
@@ -297,22 +299,23 @@ function ChapterComponment({
     return (
       <div className={[classes['container'], classes[scrollDirection]].join(' ').trim()}>
         <Meta title={`${bookName} | 第${currentChapter}章 | 睇小說`} />
-        {/* <FixedChapterName title={title} /> */}
+        <FixedChapterName title={title} />
         <ChapterHeader
           title={title}
           goBackButton={goBackButton}
           openPreferences={openPreferences}
           openChapterListDrawer={openChapterListDrawer}
         />
-        {/* <ChapterOverlay
+        <ChapterOverlay
           isOpen={showOverlay}
+          provider={provider}
           bookName={bookName}
           goBackButton={goBackButton}
           navigateChapter={navigateChapter}
           openPreferences={openPreferences}
           openChapterListDrawer={openChapterListDrawer}
           onClose={() => setShowOverlay(false)}
-        /> */}
+        />
         <div ref={scrollerRef} className={classes['scroller']}>
           <div onClick={() => setShowOverlay(true)}>{content}</div>
           {nextChapter}

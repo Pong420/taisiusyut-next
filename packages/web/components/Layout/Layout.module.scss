@@ -108,6 +108,9 @@
     .left-panel,
     .right-panel {
       box-shadow: none;
+    }
+
+    .panel-content {
       padding-top: $header-height;
     }
   }

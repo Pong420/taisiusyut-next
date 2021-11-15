@@ -1,0 +1,73 @@
+@import '~styles/helpers';
+
+$transition: 0.3s;
+$easing: linear;
+
+@mixin slide-anim($name, $factor: 1) {
+  @keyframes #{$name} {
+    from {
+      transform: translateY(100% * $factor);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  transform: translateY(100% * $factor);
+  animation: #{$name} $transition $easing;
+}
+
+.content {
+  @include sq-dimen(100%);
+  @include flex(stretch, space-between, column);
+  background-color: rgba(16, 22, 26, 0.7);
+}
+
+.top,
+.bottom {
+  @include animate(transform, $transition, $easing);
+  background-color: var(--secondary-color);
+  flex: 0 0 auto;
+
+  :global(.#{$ns}-overlay-open) & {
+    transform: translateY(0);
+  }
+}
+
+.top {
+  @include slide-anim(slide-down, -1);
+  @include dimen(100%, $header-height);
+  @include flex(center);
+  @include padding-x(15px);
+}
+
+.bottom {
+  @include slide-anim(slide-up, 1);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-head {
+  @include dimen(100%, auto);
+  @include flex(center, space-between);
+  @include padding-x(15px);
+  @include padding-y(10px);
+  font-size: 14px;
+}
+
+.bottom-content {
+  @include dimen(100%);
+  @include flex(center, space-between);
+  @include padding-x(15px);
+  @include padding-y(20px 15px);
+  border-top: 1px solid var(--divider-color);
+}
+
+.item {
+  @include dimen(60px, 100%);
+  font-size: 12px;
+  text-align: center;
+  user-select: none;
+
+  .text {
+    margin-top: 5px;
+  }
+}
