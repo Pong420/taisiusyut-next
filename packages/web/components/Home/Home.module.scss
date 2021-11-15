@@ -8,7 +8,6 @@
 
 .content {
   @include sq-dimen(100%);
-  @include flex(center, center);
 }
 
 .title {
@@ -17,6 +16,11 @@
 }
 
 .body {
-  @include sq-dimen(100%);
-  @include flex(center, center, column);
+  @include flex(center, null, column);
+  margin-top: 30%;
+}
+
+.form {
+  width: 400px;
+  margin-bottom: 20px;
 }
