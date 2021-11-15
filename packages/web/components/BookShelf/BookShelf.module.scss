@@ -1,8 +1,9 @@
 @import '~styles/helpers';
 
 .shelf {
+  @include flex($flex-direction: column);
+  @include sq-dimen(100%);
   background-color: var(--primary-color);
-  height: 100%;
 }
 
 .header {
@@ -10,15 +11,12 @@
 }
 
 .content {
-  @include sq-dimen(100%);
+  @include flex($flex-direction: column);
+  flex: 1 1 auto;
   overflow: auto;
 }
 
-// .empty {
-//   @include sq-dimen(100%);
-//   margin-top: -1px; // for border
-
-//   button {
-//     width: 80px;
-//   }
-// }
+.empty {
+  @include sq-dimen(100%);
+  margin-top: -1px; // for border
+}
