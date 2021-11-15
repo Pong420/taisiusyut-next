@@ -8,7 +8,7 @@ import classes from './BookDetails.module.scss';
 export interface BookDetailsChaptersProps {
   provider: string;
   bookName: string;
-  chapters: IChapter[];
+  chapters: Partial<IChapter>[];
 }
 
 const pageSize = 30;
@@ -22,12 +22,15 @@ export function BookDetailsChapters({ provider, bookName, chapters }: BookDetail
   }, [chapters]);
 
   return (
-    <div className={classes['chapters']}>
-      <ChapterGrids provider={provider} bookName={bookName} chapters={chapters.slice(start, start + pageSize)}>
-        <div className={classes['spacer']} />
-        <Divider className={classes['divider']} />
-        <Pagination onPageChange={setPageNo} pageSize={pageSize} total={chapters.length} />
-      </ChapterGrids>
-    </div>
+    <ChapterGrids
+      className={classes['chapters']}
+      provider={provider}
+      bookName={bookName}
+      chapters={chapters.slice(start, start + pageSize)}
+    >
+      <div className={classes['spacer']} />
+      <Divider className={classes['divider']} />
+      <Pagination onPageChange={setPageNo} pageSize={pageSize} total={chapters.length} />
+    </ChapterGrids>
   );
 }

@@ -59,7 +59,10 @@ function ChapterComponment({
   const [chapterNums, setChapterNums] = useState([initialChapterNo]);
   const [currentChapter, setCurrentChapter] = useState(initialChapterNo);
 
-  const [openChapterListDrawer, chapters] = useChapterListDrawer({ provider, bookName }, initialChapters);
+  const [openChapterListDrawer, chapters] = useChapterListDrawer(
+    { provider, bookName, chapterNo: currentChapter },
+    initialChapters
+  );
   const [data, setData] = useState<Record<number, IChapterContent>>(
     initialChapter ? { [initialChapterNo]: initialChapter } : {}
   );
@@ -74,12 +77,6 @@ function ChapterComponment({
   const [, setShowOverlay] = useState(false);
   const { fontSize, lineHeight, autoFetchNextChapter } = preferences;
   const { setRecords } = useGoBack();
-
-  const _openChapterListDrawer = () =>
-    openChapterListDrawer({
-      chapterNo: currentChapter,
-      onItemClick: chapter => gotoChapter({ provider, bookName, chapterNo: chapter.no || 1 })
-    });
 
   // const navigateChapter = (factor: 1 | -1) => {
   //   const chapterNo = currentChapter + factor;
@@ -305,7 +302,7 @@ function ChapterComponment({
           title={title}
           goBackButton={goBackButton}
           openPreferences={openPreferences}
-          openChapterListDrawer={_openChapterListDrawer}
+          openChapterListDrawer={openChapterListDrawer}
         />
         {/* <ChapterOverlay
           isOpen={showOverlay}
@@ -313,7 +310,7 @@ function ChapterComponment({
           goBackButton={goBackButton}
           navigateChapter={navigateChapter}
           openPreferences={openPreferences}
-          openChapterListDrawer={_openChapterListDrawer}
+          openChapterListDrawer={openChapterListDrawer}
           onClose={() => setShowOverlay(false)}
         /> */}
         <div ref={scrollerRef} className={classes['scroller']}>

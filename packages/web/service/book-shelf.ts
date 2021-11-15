@@ -9,4 +9,4 @@ export const removeBookFromShelf = (id: string) => api.delete<void>(`/shelf/${id
 
 export const updateBookShelf = (id: string, payload: IUpdateBookShelf) => api.patch(`/shelf/${id}`, payload);
 
-export const lastVisit = (id: string, lastVistChapter: number) => updateBookShelf(id, { lastVistChapter });
+export const lastVistChapter = (id: string, lastVistChapter: number) => updateBookShelf(id, { lastVistChapter });

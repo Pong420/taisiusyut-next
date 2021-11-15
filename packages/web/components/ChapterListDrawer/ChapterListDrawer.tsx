@@ -5,11 +5,16 @@ import { getChapters } from '@/service';
 import { IChapter, IGetChapters } from '@/typings';
 import { Toaster } from '@/utils/toaster';
 import { createOpenOverlay } from '@/utils/openOverlay';
+import router from 'next/router';
 
 interface ChapterListDrawerProps extends ChapterListDrawerContentProps {
   isOpen?: boolean;
   onClose: () => void;
   onClosed: () => void;
+}
+
+export interface UseChapterListDrawerOptions extends IGetChapters {
+  chapterNo?: number;
 }
 
 const openChapterListDrawer = createOpenOverlay(ChapterListDrawer);
@@ -36,16 +41,20 @@ export function ChapterListDrawer({
   );
 }
 
-export function useChapterListDrawer({ provider, bookName }: IGetChapters, initialValue?: IChapter[]) {
+export function useChapterListDrawer(
+  { provider, bookName, chapterNo }: UseChapterListDrawerOptions,
+  initialValue?: IChapter[]
+) {
   const [chapters, setChapters] = useState<Partial<IChapter>[]>(initialValue || Array.from({ length: 30 }, () => ({})));
   const drawer = useRef<ReturnType<typeof openChapterListDrawer>>();
 
-  async function openDrawer(props: Pick<ChapterListDrawerContentProps, 'chapterNo' | 'onItemClick'>) {
+  async function openDrawer() {
     const loaded = !!(chapters.length && chapters[0].name);
     const _handler = openChapterListDrawer({
-      ...props,
       chapters,
+      chapterNo,
       loading: !loaded,
+      onItemClick: chapter => router.replace(`/book/${provider}/${bookName}/${chapter.no || 1}`, undefined),
       onReverse: chapters => {
         _handler.update({ chapters: chapters.slice().reverse() });
       }

@@ -97,6 +97,7 @@
   .layout {
     .header {
       @include fixed(-1px, null, 0);
+      z-index: 1;
     }
 
     .left-panel {

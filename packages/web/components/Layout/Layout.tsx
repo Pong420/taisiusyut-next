@@ -32,8 +32,11 @@ export function Layout({ children }: LayoutProps) {
       const isSearchPage = asPath.startsWith('/search');
 
       if (isSearchPage) {
-        const persists = singlePage ? false : leftPanel?.type === SearchPanel && isBookPage;
-        if (persists) {
+        return <SearchPanel onLeave={onLeave} />;
+      }
+
+      if (isBookPage) {
+        if (leftPanel?.type === SearchPanel && !singlePage) {
           return <SearchPanel onLeave={onLeave} />;
         }
       }

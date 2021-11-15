@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAuthState } from '@/hooks/useAuth';
 import { useBookShelf } from './useBookShelf';
 import { BookShelfUID, bookShelfUid } from './bookShelfProvider';
-import { lastVisit } from '@/service';
+import { lastVistChapter } from '@/service';
 
 export function useLastVisitChapter({ provider, name }: BookShelfUID, chapterNo: number) {
   const [shelf, actions] = useBookShelf();
@@ -17,7 +17,7 @@ export function useLastVisitChapter({ provider, name }: BookShelfUID, chapterNo:
       const timeout = setTimeout(() => {
         actions.update({ uid, lastVistChapter: chapterNo });
         if (loginStatus === 'loggedIn' && data.id) {
-          lastVisit(data.id, chapterNo).catch(() => void 0);
+          lastVistChapter(data.id, chapterNo).catch(() => void 0);
         }
       }, 1000);
 
