@@ -9,7 +9,7 @@ import { Scraper } from '../scraper';
 import { trimChapterName, trimChapterContent } from '../utils';
 
 export const name = '筆趣閣';
-const baseURL = 'http://www.biquge5200.cc/';
+const baseURL = 'https://www.biqugeu.net/';
 
 @Injectable()
 export class BiqugeScraper extends Scraper {
@@ -48,10 +48,12 @@ export class BiqugeScraper extends Scraper {
   }
 
   async getBook(bookID: string) {
-    const { data: $ } = await this.http.get('/' + bookID, {});
+    const { data: $, config } = await this.http.get('/' + bookID, {});
     const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
     const name = $('#info h1').text();
     const author = $('#info p:nth-child(2)').text().split('：')[1];
+
+    console.log('config.url', config.url);
 
     const description = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
 
@@ -107,32 +109,28 @@ export class BiqugeScraper extends Scraper {
   }
 
   async searchBooks(name: string) {
-    const { data: $ } = await this.http.get('/modules/article/search.php', {
+    const { data: $ } = await this.http.get('/searchbook.php', {
       params: {
-        searchkey: chineseConv.sify(name)
+        keyword: chineseConv.sify(name)
       }
     });
 
-    return $('.grid tr:nth-child(n+2)')
+    return $('#hotcontent .item')
       .toArray()
       .reduce((result, row) => {
-        const $col = $($(row).children());
-        const text = (nth: number) => $($col[nth]).text().trim();
+        const [span, aTag] = $(row).find('dt').children().toArray();
 
-        const name = text(0);
+        const name = $(aTag).text().trim();
         const bookID =
-          $($col[0])
-            .find('a')
+          $(aTag)
             ?.attr('href')
             ?.replace(/.*\/(?=[^/].*$)|\//g, '') || '';
 
         if (bookID) {
-          const latestChapter = text(1);
-          const author = text(2);
-          const updateTime = text(4);
-          const status = text(5)
-            .replace(/連載$/i, '連載中')
-            .replace(/已經完本$/i, '完本');
+          const latestChapter = '';
+          const author = $(span).text().trim();
+          const updateTime = +new Date();
+          const status = 'NONE';
 
           result.push({
             name,
