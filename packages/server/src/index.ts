@@ -8,16 +8,32 @@ import { setup } from './setup';
 import { BookService } from './modules/book/book.service';
 import { MongooseSerializerInterceptor } from './utils/mongoose-serializer.interceptor';
 
-let app: INestApplication;
-let appPromise: Promise<INestApplication>;
+class GlobalRef<T> {
+  private readonly sym: symbol;
+
+  constructor(uniqueName: string) {
+    this.sym = Symbol.for(uniqueName);
+  }
+
+  get value(): T | null {
+    return (global[this.sym] as T) || null;
+  }
+
+  set value(value: T | null) {
+    (global as any)[this.sym] = value;
+  }
+}
+
+const app = new GlobalRef<INestApplication>('app');
+const appPromise = new GlobalRef<Promise<INestApplication>>('appPromise');
 
 export async function getApp() {
-  if (app) return app;
+  if (app.value) return app.value;
 
-  if (!appPromise) {
+  if (!appPromise.value) {
     // eslint-disable-next-line
     console.log('creating nest app');
-    appPromise = new Promise<INestApplication>(async resolve => {
+    appPromise.value = new Promise<INestApplication>(async resolve => {
       const appInCreation = await NestFactory.create(AppModule, { logger: ['warn', 'error', 'debug'] });
       appInCreation.setGlobalPrefix('api');
       setup(appInCreation);
@@ -26,9 +42,9 @@ export async function getApp() {
     });
   }
 
-  app = await appPromise;
+  app.value = await appPromise.value;
 
-  return app;
+  return app.value;
 }
 
 export async function getListener() {
