@@ -1,9 +1,13 @@
 import { getListener } from '@taisiusyut-next/server';
-import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
+import { NextApiRequest, NextApiResponse, PageConfig, NextApiHandler } from 'next';
+
+let listener: NextApiHandler | undefined;
 
 export default function apiHandler(req: NextApiRequest, res: NextApiResponse) {
   return new Promise(async resolve => {
-    const listener = await getListener();
+    if (!listener) {
+      listener = await getListener();
+    }
     listener(req, res);
     res.on('finish', resolve);
   });
