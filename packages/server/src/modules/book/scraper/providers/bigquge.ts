@@ -1,3 +1,4 @@
+import http from 'http';
 import https from 'https';
 import path from 'path';
 import chineseConv from 'chinese-conv';
@@ -15,7 +16,9 @@ export class BiqugeScraper extends Scraper {
   constructor() {
     super(name, {
       baseURL,
+      httpAgent: new http.Agent({ keepAlive: true }),
       httpsAgent: new https.Agent({
+        keepAlive: true,
         rejectUnauthorized: false
       })
     });
