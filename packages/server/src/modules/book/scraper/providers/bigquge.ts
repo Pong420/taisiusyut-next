@@ -1,3 +1,4 @@
+import https from 'https';
 import path from 'path';
 import chineseConv from 'chinese-conv';
 import { CheerioAPI } from 'cheerio';
@@ -12,7 +13,12 @@ const baseURL = 'http://www.b520.cc/';
 @Injectable()
 export class BiqugeScraper extends Scraper {
   constructor() {
-    super(name, { baseURL });
+    super(name, {
+      baseURL,
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+      })
+    });
   }
 
   protected _getChapters($: CheerioAPI) {
