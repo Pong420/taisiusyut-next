@@ -48,11 +48,7 @@ export class BiqugeScraper extends Scraper {
   }
 
   async getBook(bookID: string) {
-    const { data: $ } = await this.http.get('/' + bookID, {
-      headers: {
-        Referer: `${baseURL}/${bookID}/`
-      }
-    });
+    const { data: $ } = await this.http.get('/' + bookID, {});
     const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
     const name = $('#info h1').text();
     const author = $('#info p:nth-child(2)').text().split('：')[1];
@@ -82,11 +78,7 @@ export class BiqugeScraper extends Scraper {
   }
 
   async getChapterContent(bookID: string, chapterID: string) {
-    const { data: $ } = await this.http.get(`/${bookID}/${chapterID}.html`, {
-      headers: {
-        Referer: `${baseURL}/${bookID}/`
-      }
-    });
+    const { data: $ } = await this.http.get(`/${bookID}/${chapterID}.html`, {});
 
     const [prevChapter, , nextChapter] = $('.bottem1 a')
       .toArray()
@@ -118,9 +110,6 @@ export class BiqugeScraper extends Scraper {
     const { data: $ } = await this.http.get('/modules/article/search.php', {
       params: {
         searchkey: chineseConv.sify(name)
-      },
-      headers: {
-        Referer: baseURL
       }
     });
 
