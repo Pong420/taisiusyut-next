@@ -1,4 +1,5 @@
 import React from 'react';
+import NextNprogress from 'nextjs-progressbar';
 import type { AppProps /*, AppContext */ } from 'next/app';
 import { Meta, CommonMeta } from '@/components/Meta';
 import { Layout, LayoutProps } from '@/components/Layout';
@@ -37,10 +38,20 @@ const Provider = composeProviders(
   GoBackProvider
 );
 
+const nprogress = { showSpinner: false };
+
 function App(props: ExtendAppProps) {
   return (
     <Provider>
       <>
+        <NextNprogress
+          color="#2d72d2"
+          height={2}
+          startPosition={0.3}
+          stopDelayMs={200}
+          showOnShallow={true}
+          options={nprogress}
+        />
         <Meta />
         <CommonMeta />
         <AppContent {...props} />
