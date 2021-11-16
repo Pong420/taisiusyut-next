@@ -17,7 +17,8 @@
     "build": "lerna run build --include-dependencies --stream",
     "web": "yarn workspace @taisiusyut-next/web",
     "server": "yarn workspace @taisiusyut-next/server",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "heroku-postbuild": "yarn build"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
