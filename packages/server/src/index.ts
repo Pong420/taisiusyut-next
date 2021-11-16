@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import http from 'http';
 import { NestFactory } from '@nestjs/core';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { NextApiHandler } from 'next';
 import { AppModule } from './app.module';
 import { setup } from './setup';
@@ -31,14 +31,18 @@ export async function getApp() {
   if (app.value) return app.value;
 
   if (!appPromise.value) {
-    // eslint-disable-next-line
-    console.log('creating nest app');
     appPromise.value = new Promise<INestApplication>(async resolve => {
+      Logger.debug('creating app');
       const appInCreation = await NestFactory.create(AppModule, { logger: ['warn', 'error', 'debug'] });
       appInCreation.setGlobalPrefix('api');
       setup(appInCreation);
+      Logger.debug('intializing app');
       await appInCreation.init();
+      Logger.debug('app created');
       resolve(appInCreation);
+    }).catch(error => {
+      Logger.error(error);
+      throw error;
     });
   }
 
