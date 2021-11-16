@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser';
 import { Request, Response } from 'express';
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@/config';
 import { RefreshToken, RefreshTokenDocument } from './schemas/refreshToken.schema';
@@ -22,7 +22,7 @@ export interface CookieSerializeOptions {
 }
 
 @Injectable()
-export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
+export class RefreshTokenService extends MongooseCRUDService<RefreshToken> implements OnModuleInit {
   protected expireMiniues: number;
 
   constructor(
@@ -31,6 +31,11 @@ export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
   ) {
     super(refreshTokenModel);
     this.expireMiniues = Number(configService.get('REFRESH_TOKEN_EXPIRES_IN_MINUTES', 0));
+  }
+
+  async onModuleInit() {
+    const index: { [X in keyof RefreshToken]?: number } = { updatedAt: 1 };
+    await this.model.collection.createIndexes([{ key: index, expireAfterSeconds: this.expireMiniues * 60 }]);
   }
 
   getCookieOpts(options?: Partial<CookieSerializeOptions>): CookieSerializeOptions {

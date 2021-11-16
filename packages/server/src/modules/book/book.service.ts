@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseCRUDService } from '@/utils/mongoose-crud.service';
 import { IBookDetails } from '@/typings';
@@ -8,9 +8,18 @@ import { getScraper } from './scraper/providers';
 import { GetChapterContentDto } from './dto';
 
 @Injectable()
-export class BookService extends MongooseCRUDService<Book> {
+export class BookService extends MongooseCRUDService<Book> implements OnModuleInit {
   constructor(@InjectModel(Book.name) protected readonly bookModel: Model<BookDocument>) {
     super(bookModel);
+  }
+
+  async onModuleInit() {
+    const index: { [X in keyof Book]?: any } = {
+      bookID: 1,
+      provider: 1
+    };
+
+    await this.model.collection.createIndexes([{ key: index, unique: true }]);
   }
 
   prune<T extends Partial<IBookDetails>>({ chapters, ...payload }: T) {
