@@ -28,7 +28,10 @@ const app = new GlobalRef<INestApplication>('app');
 const appPromise = new GlobalRef<Promise<INestApplication>>('appPromise');
 
 export async function getApp() {
-  if (app.value) return app.value;
+  if (app.value) {
+    Logger.debug('app exists');
+    return app.value;
+  }
 
   if (!appPromise.value) {
     appPromise.value = new Promise<INestApplication>(async resolve => {
@@ -46,7 +49,11 @@ export async function getApp() {
     });
   }
 
+  Logger.debug('appPromise exists');
+
   app.value = await appPromise.value;
+
+  Logger.debug('appPromise resolve');
 
   return app.value;
 }

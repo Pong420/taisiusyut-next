@@ -1,4 +1,6 @@
 import cacheManager from 'cache-manager';
+import { AxiosError } from 'axios';
+import { Logger } from '@nestjs/common';
 import { Scraper } from '../scraper';
 import { name as bigquge, BiqugeScraper } from './bigquge';
 
@@ -8,16 +10,19 @@ const memoryCache = cacheManager.caching({ store: 'memory', ttl: 12 * 60 * 60 /*
 
 function enhanceScraper<T extends Scraper>(scraper: T) {
   function enhancer<F extends (...args: any[]) => Promise<R>, R>(fn: F) {
+    const logger = new Logger(fn.name);
     let retry = 0;
     return async function run(...args: Parameters<F>): Promise<R> {
       try {
+        logger.debug('start');
         const key = [scraper.name].concat(args as string[]).join('_');
-        return await memoryCache.wrap(key, () => fn(...args));
+        const result: R = await memoryCache.wrap(key, () => fn(...args));
+        logger.debug('end');
+        return result;
       } catch (error) {
         if (retry >= 10) throw error;
         retry += 1;
-        // eslint-disable-next-line
-        console.log('retrying', fn.name, error);
+        logger.debug('retrying', (error as AxiosError).message);
         return await run(...args);
       }
     };
