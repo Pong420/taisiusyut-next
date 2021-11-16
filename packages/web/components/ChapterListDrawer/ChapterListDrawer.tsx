@@ -47,9 +47,9 @@ export function useChapterListDrawer(
 ) {
   const [chapters, setChapters] = useState<Partial<IChapter>[]>(initialValue || Array.from({ length: 30 }, () => ({})));
   const drawer = useRef<ReturnType<typeof openChapterListDrawer>>();
+  const loaded = !!(chapters.length && chapters[0].name);
 
   async function openDrawer() {
-    const loaded = !!(chapters.length && chapters[0].name);
     const _handler = openChapterListDrawer({
       chapters,
       chapterNo,
@@ -63,7 +63,7 @@ export function useChapterListDrawer(
   }
 
   useEffect(() => {
-    if (provider && bookName) {
+    if (provider && bookName && !loaded) {
       const request = async () => {
         try {
           const chapters = await getChapters({ provider, bookName });
@@ -84,7 +84,7 @@ export function useChapterListDrawer(
         return () => clearTimeout(timeout);
       }
     }
-  }, [provider, bookName]);
+  }, [provider, bookName, loaded]);
 
   return [openDrawer, chapters] as const;
 }

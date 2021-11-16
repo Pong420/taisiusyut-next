@@ -7,7 +7,7 @@ import { Scraper } from '../scraper';
 import { trimChapterName, trimChapterContent } from '../utils';
 
 export const name = '筆趣閣';
-const baseURL = 'https://www.b520.cc/';
+const baseURL = 'http://www.b520.cc/';
 
 @Injectable()
 export class BiqugeScraper extends Scraper {

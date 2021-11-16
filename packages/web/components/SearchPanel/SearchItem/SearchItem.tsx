@@ -39,7 +39,8 @@ export function SearchItem({ book }: SearchItemProps) {
 
   if (book && book.name) {
     const basePath = `/book/${book.provider}/${book.name}`;
-    const active = decodeURIComponent(asPath).startsWith(basePath);
+    const currentPath = decodeURIComponent(asPath);
+    const active = currentPath === basePath || currentPath.startsWith(basePath + '/');
     return (
       <div className={[className, active ? classes['active'] : ''].join(' ').trim()}>
         <Link href={basePath} prefetch={false}>

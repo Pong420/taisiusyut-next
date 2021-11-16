@@ -13,7 +13,7 @@ export function useLastVisitChapter({ provider, name }: BookShelfUID, chapterNo:
     if (!uid) return;
 
     const data = shelf.byIds[uid];
-    if (data?.lastVistChapter !== chapterNo) {
+    if (data && data?.lastVistChapter !== chapterNo) {
       const timeout = setTimeout(() => {
         actions.update({ uid, lastVistChapter: chapterNo });
         if (loginStatus === 'loggedIn' && data.id) {
