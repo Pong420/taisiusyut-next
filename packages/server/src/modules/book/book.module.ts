@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BookController } from './book.controller';
 import { BookShelfController } from './book-shelf.controller';
@@ -22,6 +22,6 @@ import { BookShelf, BookShelfSchema } from './schemas/book-shelf.schema';
     ])
   ],
   controllers: [BookController, ChapterController, BookShelfController],
-  providers: [BookService, BookShelfService]
+  providers: [BookService, BookShelfService, Logger]
 })
 export class BookModule {}
