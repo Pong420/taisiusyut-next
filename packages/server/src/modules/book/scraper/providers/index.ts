@@ -2,7 +2,7 @@ import cacheManager from 'cache-manager';
 import { AxiosError } from 'axios';
 import { Logger } from '@nestjs/common';
 import { Scraper } from '../scraper';
-import { name as bigquge, BiqugeScraper } from './bigquge';
+import { name as bigquge, BiqugeScraper } from './biquge';
 import { name as biquyue, BiquyueScraper } from './biquyue';
 
 export type ScraperName = keyof typeof scrapers;
