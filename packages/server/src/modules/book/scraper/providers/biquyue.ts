@@ -1,5 +1,3 @@
-import http from 'http';
-import https from 'https';
 import path from 'path';
 import chineseConv from 'chinese-conv';
 import { CheerioAPI } from 'cheerio';
@@ -8,18 +6,21 @@ import { IBookDetails, ISearchResult, IChapter } from '@/typings';
 import { Scraper } from '../scraper';
 import { trimChapterName, trimChapterContent } from '../utils';
 
-export const name = 'biquge5200';
-const baseURL = 'http://www.biquge5200.cc/';
+export const name = 'biquyue';
+const baseURL = 'https://www.biquyue.com';
 
 @Injectable()
-export class BiqugeScraper extends Scraper {
+export class BiquyueScraper extends Scraper {
   constructor() {
     super(name, {
-      baseURL,
-      httpAgent: new http.Agent({}),
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-      })
+      baseURL
+    });
+
+    this.http.interceptors.request.use(config => {
+      if (config.url?.match(/book_\d+$/)) {
+        config.url += '/';
+      }
+      return config;
     });
   }
 
@@ -48,11 +49,12 @@ export class BiqugeScraper extends Scraper {
 
   async getBook(bookID: string) {
     const { data: $ } = await this.http.get('/' + bookID, {});
+
     const cover = $('#fmimg img').attr('src')?.replace('http://', 'https://');
     const name = $('#info h1').text();
     const author = $('#info p:nth-child(2)').text().split('：')[1];
 
-    const description = $('#intro p').html()?.trim().replace(/<br>/g, '\n') || '';
+    const description = $('#intro').html()?.trim().replace(/<br>/g, '\n') || '';
 
     const chapters = this._getChapters($);
     const [{ name: latestChapter }] = chapters.slice(-1);
@@ -81,7 +83,6 @@ export class BiqugeScraper extends Scraper {
 
     const [prevChapter, , nextChapter] = $('.bottem1 a')
       .toArray()
-      .slice(1, 4)
       .map(el => {
         const id = path.basename($(el).attr('href') || '').replace('.html', '');
         return id === bookID ? null : id;
@@ -106,30 +107,31 @@ export class BiqugeScraper extends Scraper {
   }
 
   async searchBooks(name: string) {
-    const { data: $ } = await this.http.get('/modules/article/search.php', {
+    const { data: $ } = await this.http.get('/search.php', {
       params: {
-        searchkey: chineseConv.sify(name)
+        q: chineseConv.sify(name)
       }
     });
 
-    return $('.grid tr:nth-child(n+2)')
+    return $('.result-game-item-detail')
       .toArray()
       .reduce((result, row) => {
-        const $col = $($(row).children());
-        const text = (nth: number) => $($col[nth]).text().trim();
+        const data = $(row).find('.result-game-item-info-tag');
+        const text = (nth: number) => $($(data[nth]).children()[1]).text().trim();
 
-        const name = text(0);
+        const $name = $(row).find('h3');
+        const name = $name.text().replace(/\n/g, '').trim();
         const bookID =
-          $($col[0])
+          $name
             .find('a')
             ?.attr('href')
             ?.replace(/.*\/(?=[^/].*$)|\//g, '') || '';
 
         if (bookID) {
-          const latestChapter = text(1);
-          const author = text(2);
-          const updateTime = text(4);
-          const status = text(5)
+          const latestChapter = text(3);
+          const author = text(0);
+          const updateTime = text(2);
+          const status = text(1)
             .replace(/連載$/i, '連載中')
             .replace(/已經完本$/i, '完本');
 

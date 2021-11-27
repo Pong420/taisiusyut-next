@@ -42,7 +42,7 @@ export class BookService extends MongooseCRUDService<Book> implements OnModuleIn
       }
 
       const results = await scraper.searchBooks(bookName);
-      const result = results.find(b => b.name === bookName);
+      const result = results.find(b => b.name === bookName) || results[0];
 
       if (result) {
         const payload = await scraper.getBook(result.bookID);

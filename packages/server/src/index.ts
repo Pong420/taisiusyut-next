@@ -8,33 +8,17 @@ import { setup } from './setup';
 import { BookService } from './modules/book/book.service';
 import { MongooseSerializerInterceptor } from './utils/mongoose-serializer.interceptor';
 
-class GlobalRef<T> {
-  private readonly sym: symbol;
-
-  constructor(uniqueName: string) {
-    this.sym = Symbol.for(uniqueName);
-  }
-
-  get value(): T | null {
-    return (global[this.sym] as T) || null;
-  }
-
-  set value(value: T | null) {
-    (global as any)[this.sym] = value;
-  }
-}
-
-const app = new GlobalRef<INestApplication>('app');
-const appPromise = new GlobalRef<Promise<INestApplication>>('appPromise');
+let app: INestApplication;
+let appPromise: Promise<INestApplication>;
 
 export async function getApp() {
-  if (app.value) {
+  if (app) {
     Logger.debug('app exists');
-    return app.value;
+    return app;
   }
 
-  if (!appPromise.value) {
-    appPromise.value = new Promise<INestApplication>(async resolve => {
+  if (!appPromise) {
+    appPromise = new Promise<INestApplication>(async resolve => {
       Logger.debug('creating app');
       const appInCreation = await NestFactory.create(AppModule, { logger: ['warn', 'error', 'debug'] });
       appInCreation.setGlobalPrefix('api');
@@ -51,11 +35,11 @@ export async function getApp() {
 
   Logger.debug('appPromise exists');
 
-  app.value = await appPromise.value;
+  app = await appPromise;
 
   Logger.debug('appPromise resolve');
 
-  return app.value;
+  return app;
 }
 
 export async function getListener() {

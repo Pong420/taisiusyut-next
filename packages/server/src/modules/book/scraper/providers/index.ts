@@ -3,8 +3,24 @@ import { AxiosError } from 'axios';
 import { Logger } from '@nestjs/common';
 import { Scraper } from '../scraper';
 import { name as bigquge, BiqugeScraper } from './bigquge';
+import { name as biquyue, BiquyueScraper } from './biquyue';
 
 export type ScraperName = keyof typeof scrapers;
+
+export const DEFAULT_SCRAPER = biquyue;
+
+export const scrapers: Record<string, Scraper> = {
+  [bigquge]: new BiqugeScraper(),
+  [biquyue]: new BiquyueScraper()
+};
+
+for (const key in scrapers) {
+  enhanceScraper(scrapers[key]);
+}
+
+export function getScraper(name: ScraperName = DEFAULT_SCRAPER) {
+  return scrapers[name] || scrapers[DEFAULT_SCRAPER];
+}
 
 const memoryCache = cacheManager.caching({ store: 'memory', ttl: 12 * 60 * 60 /*seconds*/ });
 
@@ -39,18 +55,4 @@ function enhanceScraper<T extends Scraper>(scraper: T) {
 
   const searchBooks = scraper.searchBooks.bind(scraper);
   scraper.searchBooks = enhancer(searchBooks);
-}
-
-export const scrapers: Record<string, Scraper> = {
-  [bigquge]: new BiqugeScraper()
-};
-
-for (const key in scrapers) {
-  enhanceScraper(scrapers[key]);
-}
-
-const DEFAULT_SCRAPER = bigquge;
-
-export function getScraper(name: ScraperName = DEFAULT_SCRAPER) {
-  return scrapers[name] || scrapers[DEFAULT_SCRAPER];
 }
