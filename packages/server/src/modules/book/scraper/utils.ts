@@ -22,8 +22,8 @@ export function trimChapterName(name: string) {
     name
       .replace(new RegExp(`^第.*[${cnNum.join('|')}|0-9][章|篇| ][：|、|?]?|[0-9]*、`, 'g'), '')
       .replace(new RegExp(`[\(|（｜【].*[${cnNum.join('|')}|0-9|加]更[\)|）｜】]$`, 'g'), '')
-      .replace(new RegExp(`[\(|（｜【](.*月票.*)[\)|）】]$`, 'g'), '')
-      .replace(new RegExp(`[\(|（｜【](.*盟.*)[\)|）｜】]$`, 'g'), '')
+      .replace(new RegExp(`[\(|（｜【](.*(求|月票｜推薦票｜盟).*)[\)|）】]$`, 'g'), '')
+      .replace(/^(\s+)?-+/, '')
       .replace(/^[0-9]+/, '')
       .trim()
       .replace(/ 新$/, '') || name
