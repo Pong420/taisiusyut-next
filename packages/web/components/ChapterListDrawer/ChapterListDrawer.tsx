@@ -45,7 +45,7 @@ export function useChapterListDrawer(
   { provider, bookName, chapterNo }: UseChapterListDrawerOptions,
   initialValue?: IChapter[]
 ) {
-  const [chapters, setChapters] = useState<Partial<IChapter>[]>(initialValue || Array.from({ length: 30 }, () => ({})));
+  const [chapters, setChapters] = useState<Partial<IChapter>[]>([]);
   const drawer = useRef<ReturnType<typeof openChapterListDrawer>>();
   const loaded = !!(chapters.length && chapters[0].name);
 
@@ -61,6 +61,10 @@ export function useChapterListDrawer(
     });
     drawer.current = _handler;
   }
+
+  useEffect(() => {
+    setChapters(initialValue || Array.from({ length: 30 }, () => ({})));
+  }, [initialValue]);
 
   useEffect(() => {
     if (provider && bookName && !loaded) {
