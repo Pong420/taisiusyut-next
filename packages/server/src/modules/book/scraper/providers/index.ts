@@ -26,11 +26,11 @@ const memoryCache = cacheManager.caching({ store: 'memory', ttl: 12 * 60 * 60 /*
 
 function enhanceScraper<T extends Scraper>(scraper: T) {
   function enhancer<F extends (...args: any[]) => Promise<R>, R>(fn: F) {
-    const logger = new Logger(fn.name);
+    const logger = new Logger(`${scraper.name}, ${fn.name.replace(/bound /g, '')}`);
     let retry = 0;
     return async function run(...args: Parameters<F>): Promise<R> {
       try {
-        logger.debug('start');
+        logger.debug(`start ${args}`);
         const key = [scraper.name].concat(args as string[]).join('_');
         const result: R = await memoryCache.wrap(key, () => fn(...args));
         logger.debug('end');
@@ -38,7 +38,7 @@ function enhanceScraper<T extends Scraper>(scraper: T) {
       } catch (error) {
         if (retry >= 10) throw error;
         retry += 1;
-        logger.debug('retrying', (error as AxiosError).message);
+        logger.debug(`retrying ${(error as AxiosError).message}`);
         return await run(...args);
       }
     };
