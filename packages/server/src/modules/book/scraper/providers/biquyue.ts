@@ -88,7 +88,7 @@ export class BiquyueScraper extends Scraper {
         return id === bookID ? null : id;
       });
 
-    const [bookName, fullChapterName] =
+    const [fullChapterName, , bookName] =
       $("meta[name='keywords']")
         .attr('content')
         ?.split(',')
