@@ -32,7 +32,7 @@ export function MainMenuOverlay(props: MainMenuDialogProps) {
   const [preferences, preferncesActions] = usePreferences();
 
   return (
-    <ListViewOverlay {...props} icon={MainMenuOverlayIcon} title={MainMenuOverlayTitle}>
+    <ListViewOverlay {...props} icon={MainMenuOverlayIcon} title={MainMenuOverlayTitle} position="left">
       <ListSpacer />
 
       <AuthrizedListItem
