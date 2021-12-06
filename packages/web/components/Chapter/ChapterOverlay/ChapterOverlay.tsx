@@ -8,6 +8,7 @@ import classes from './ChapterOverlay.module.scss';
 interface Props extends OverlayProps {
   provider: string;
   bookName: string;
+  nextChapter?: boolean;
   goBackButton: React.ReactElement;
   navigateChapter: (factor: 1 | -1) => void;
   openPreferences?: () => void;
@@ -34,13 +35,14 @@ function ChapterOverlayBase({
   provider,
   bookName,
   goBackButton,
+  nextChapter,
   navigateChapter,
   openPreferences,
   openChapterListDrawer,
   ...props
 }: Props) {
   return (
-    <Overlay {...props} hasBackdrop={false}>
+    <Overlay {...props} hasBackdrop={false} className={classes['overlay']}>
       <div className={classes['content']} onClick={props.onClose}>
         <div className={classes['top']}>{goBackButton}</div>
         <div className={classes['bottom']}>
@@ -48,9 +50,15 @@ function ChapterOverlayBase({
             <Button minimal onClick={() => navigateChapter(-1)}>
               上一章
             </Button>
-            <Button minimal onClick={() => navigateChapter(1)}>
-              下一章
-            </Button>
+            {nextChapter ? (
+              <Button minimal onClick={() => navigateChapter(1)}>
+                下一章
+              </Button>
+            ) : (
+              <Button minimal onClick={() => router.push(`/`)}>
+                返回書架
+              </Button>
+            )}
           </div>
           <div className={classes['bottom-content']}>
             <Item icon="home" onClick={() => router.push(`/`)}>

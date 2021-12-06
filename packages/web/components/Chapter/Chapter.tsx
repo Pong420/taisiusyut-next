@@ -36,6 +36,11 @@ export interface ChapterProps extends ChapterData {
 
 type ScrollDirection = 'up' | 'down' | 'unknown';
 
+interface ScrollData {
+  dir: ScrollDirection;
+  pos: number;
+}
+
 async function gotoChapter({ provider, bookName, chapterNo }: IGetChapterContent, shallow = false) {
   await router.replace(`/book/${provider}/${bookName}/${chapterNo}`, undefined, {
     shallow
@@ -74,7 +79,7 @@ function ChapterComponment({
   const loaded = useRef<Record<string, boolean>>({
     [initialChapterNo]: !!initialChapter
   });
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('unknown');
+  const [scroll, setScroll] = useState<ScrollData>({ dir: 'unknown', pos: 0 });
 
   const [showOverlay, setShowOverlay] = useState(false);
   const { fontSize, lineHeight, autoFetchNextChapter } = preferences;
@@ -185,13 +190,12 @@ function ChapterComponment({
         .pipe(
           map(([scrollTop]) => scrollTop),
           pairwise(),
-          map(([prev, curr]) => curr - prev),
-          filter(delta => delta !== 0),
-          map((delta): ScrollDirection => (delta > 0 ? 'down' : 'up'))
+          map(([prev, curr]) => [curr, curr - prev]),
+          filter(([, delta]) => delta !== 0)
         )
-        .subscribe(direction => {
+        .subscribe(([pos, delta]) => {
           setShowOverlay(false);
-          setScrollDirection(direction);
+          setScroll({ dir: delta > 0 ? 'down' : 'up', pos });
         });
 
       const chapterUpdateSubscription = source$
@@ -297,7 +301,11 @@ function ChapterComponment({
     );
 
     return (
-      <div className={[classes['container'], classes[scrollDirection]].join(' ').trim()}>
+      <div
+        className={[classes['container'], classes[scroll.dir], classes[scroll.pos >= 10 ? 'scrolled' : '']]
+          .join(' ')
+          .trim()}
+      >
         <Meta title={`${bookName} | 第${currentChapter}章 | 睇小說`} />
         <FixedChapterName title={title} />
         <ChapterHeader
@@ -311,6 +319,7 @@ function ChapterComponment({
           provider={provider}
           bookName={bookName}
           goBackButton={goBackButton}
+          nextChapter={hasNext.current}
           navigateChapter={navigateChapter}
           openPreferences={openPreferences}
           openChapterListDrawer={openChapterListDrawer}

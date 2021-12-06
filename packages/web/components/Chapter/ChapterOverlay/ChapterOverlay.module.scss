@@ -1,6 +1,6 @@
 @import '~styles/helpers';
 
-$transition: 0.3s;
+$transition: 0.2s;
 $easing: linear;
 
 @mixin slide-anim($name, $factor: 1) {
@@ -22,14 +22,19 @@ $easing: linear;
   background-color: rgba(16, 22, 26, 0.7);
 }
 
-.top,
-.bottom {
-  @include animate(transform, $transition, $easing);
-  background-color: var(--secondary-color);
-  flex: 0 0 auto;
+.overlay {
+  .top,
+  .bottom {
+    @include animate(transform, $transition, $easing);
+    background-color: var(--secondary-color);
+    flex: 0 0 auto;
+  }
 
-  :global(.#{$ns}-overlay-open) & {
-    transform: translateY(0);
+  &:global(.#{$ns}-overlay-open) {
+    .top,
+    .bottom {
+      transform: translateY(0);
+    }
   }
 }
 
